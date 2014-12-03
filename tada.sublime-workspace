@@ -1,0 +1,742 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Place",
+				"PlaceLocalHandle"
+			],
+			[
+				"new",
+				"newArray"
+			],
+			[
+				"in",
+				"indegree"
+			],
+			[
+				"sch",
+				"_scheduler"
+			],
+			[
+				"sc",
+				"_scheduler"
+			],
+			[
+				"get",
+				"getDependencyTasks"
+			],
+			[
+				"TadaApp",
+				"TadaAppBase"
+			],
+			[
+				"newK",
+				"newKPointsX"
+			],
+			[
+				"clo",
+				"cloestPointIndex"
+			],
+			[
+				"getTask",
+				"getTask"
+			],
+			[
+				"ini",
+				"initDistributedTasks"
+			],
+			[
+				"_task",
+				"_taskDist"
+			],
+			[
+				"_",
+				"_globalReadyTasks"
+			],
+			[
+				"init",
+				"initRegionAndDist"
+			],
+			[
+				"task",
+				"taskSize"
+			],
+			[
+				"gettask",
+				"getTaskPlace"
+			],
+			[
+				"doTask",
+				"doTasksWithLoadBalance"
+			],
+			[
+				"ne",
+				"nearPointNum"
+			],
+			[
+				"score",
+				"score_with_left_gap"
+			],
+			[
+				"Sw",
+				"SWScore"
+			],
+			[
+				"sw",
+				"swscore"
+			],
+			[
+				"add",
+				"add"
+			],
+			[
+				"_glob",
+				"_globalPlaceStatus"
+			],
+			[
+				"_glo",
+				"_globalReadyTasks"
+			],
+			[
+				"pl",
+				"placeStatusHandler"
+			],
+			[
+				"Pla",
+				"PlaceLocalHandle"
+			],
+			[
+				"Con",
+				"Configuration"
+			],
+			[
+				"loc",
+				"locList"
+			],
+			[
+				"_da",
+				"_dag"
+			],
+			[
+				"work",
+				"workBagage"
+			],
+			[
+				"taskEn",
+				"taskEntryHash"
+			],
+			[
+				"remov",
+				"removedMatrix"
+			],
+			[
+				"w",
+				"width"
+			],
+			[
+				"indegre",
+				"indegreeMatrix"
+			],
+			[
+				"len",
+				"length"
+			],
+			[
+				"Tas",
+				"TaskEntry"
+			],
+			[
+				"_g",
+				"_globalAllTasks"
+			],
+			[
+				"tas",
+				"_taskMapping"
+			],
+			[
+				"pin",
+				"println"
+			],
+			[
+				"has",
+				"HashMap"
+			],
+			[
+				"last",
+				"lastPair"
+			],
+			[
+				"_gl",
+				"_globalReadyTasks"
+			],
+			[
+				"is",
+				"_isFinsh"
+			],
+			[
+				"Tada",
+				"TadaWorker"
+			],
+			[
+				"re",
+				"result"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				":w",
+				":w - Save"
+			],
+			[
+				"PCI",
+				"Package Control: Install Package"
+			],
+			[
+				"Snippet: !en",
+				"Snippet: #!/usr/bin/env"
+			],
+			[
+				"Snippet: lo",
+				"Snippet: Lorem ipsum"
+			],
+			[
+				"PC",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"pCL",
+				"Package Control: List Packages"
+			]
+		],
+		"width": 584.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/hchen/x10_ex/Tada/src/tada/TadaWorker.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/Dag.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/LCS_STR2.txt",
+		"/Users/hchen/x10_ex/Tada/src/demo/LCS_STR1.txt",
+		"/Users/hchen/x10_ex/Tada/src/tada/Tada.x10",
+		"/Users/hchen/x10_ex/Tada/src/Main.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/smithwaterman/SW_STR1.txt",
+		"/Users/hchen/x10_ex/Tada/src/demo/smithwaterman/SW_STR2.txt",
+		"/Users/hchen/x10_ex/Tada/tada.sublime-project",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/hchen/x10_ex/Tada/src/Test.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/Scheduler.x10",
+		"/Users/hchen/x10_ex/Tada/tada.sublime-workspace",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/Dag.h",
+		"/Users/hchen/x10_ex/Tada/src/tada/TadaWorker.h",
+		"/Users/hchen/x10_ex/Tada/src/demo/kmeans/KMeans.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/kmeans/KMeans.cc",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/DagIR.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/kmeans/MediumResult.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/Node.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/kmeans/KMPoint.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/LCS.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/smithwaterman/SmithWaterman.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/WordCount.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/Viterbi.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/smithwaterman/SWScore.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/Task.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/TaskSet.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/NodeSet.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/DagUpper.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/DagJoin.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/Dag124.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/smithwaterman/SmithWaterman.cc",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/TaskSet.x10-bak",
+		"/Users/hchen/x10_ex/ReduceEx.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/kmeans/KMeansPoint",
+		"/Users/hchen/x10_ex/Tada/src/demo/KMeans.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/Location.x10",
+		"/Users/hchen/x10_ex/Tada/src/compile.sh",
+		"/Users/hchen/x10_ex/Tada/src/demo/SmithWaterman.x10",
+		"/Users/hchen/x10_ex/Tada/src/demo/SW_STR2.txt",
+		"/Users/hchen/x10_ex/Tada/src/demo/SW_STR1.txt",
+		"/Users/hchen/x10_ex/Tada/src/Main.cc",
+		"/Users/hchen/x10_ex/Tada/src/tada/Configuration.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/TaskSet2.x10",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/Task.h",
+		"/Users/hchen/x10_ex/Tada/src/tada/dag/TaskSet.h",
+		"/Users/hchen/x10_ex/Tada/src/random_string.py",
+		"/Users/hchen/refactoring-cheat-sheet/docs/bad-smells-in-code.md",
+		"/Users/hchen/x10_ex/AtomicEx.x10",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/Java/Java.tmLanguage",
+		"/Users/hchen/Desktop/test.ssraw",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/User/mysyntax.JSON-tmLanguage.YAML-tmLanguage",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/C++/C.tmLanguage",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/User/mysyntax.JSON-tmLanguage.tmLanguage",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/C++/C.tmLanguage.cache",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/Vintage/Default (OSX).sublime-keymap",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/Vintage/Default (Windows).sublime-keymap",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/Vintage/Default.sublime-keymap",
+		"/Users/hchen/sublime_test/Test.java",
+		"/Users/hchen/sublime_test/1.txt",
+		"/Users/hchen/sublime_test/test.sublime-project",
+		"/Users/hchen/sublime_test/test.sublime-workspace",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/C++/C++.tmLanguage",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/Java/final.sublime-snippet",
+		"/Users/hchen/Desktop/test.java",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/Java/constant.sublime-snippet",
+		"/Users/hchen/Library/Application Support/Sublime Text 2/Packages/Package Control/Package Control.sublime-settings"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"",
+			"TadaAppDP",
+			"",
+			"loc.i",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"resilientF",
+			"resilient",
+			"print",
+			"resi",
+			"getLocal",
+			"at(",
+			"at",
+			"addAnd",
+			"addAndGet",
+			"getNode",
+			"_globalReadyTasks",
+			"addAndGet",
+			"getTaskPlace",
+			"BaseTadaApp",
+			"Task.make",
+			"new Node",
+			".Task",
+			"NodeSet",
+			"node",
+			"Node",
+			"getDep",
+			"TaskSet",
+			"Node.",
+			"Node:Node",
+			"entry.Node",
+			"e.Node",
+			"Task",
+			"j2",
+			"i2",
+			"new Task",
+			"point",
+			"getTask",
+			"width as",
+			"height as",
+			"this.height",
+			"this.width",
+			"getTaskPlace(i",
+			"_globalAll",
+			"_globalALl",
+			"_globalAll",
+			"broad",
+			"braoad",
+			"broad",
+			"x10c",
+			"Tasks",
+			"_local",
+			"this._local",
+			"localCachedTasks.",
+			"rehash",
+			"occupation",
+			"removedMatrix",
+			"finishMatrix",
+			"indegreeMatrix",
+			"resultMatrix",
+			"Int = 0;",
+			"i==0)",
+			"j==0)",
+			"j==0 ",
+			"i==0 ",
+			"j+1)",
+			"j-1)",
+			"this.width+1",
+			"this.width-1",
+			"this.height-1",
+			"j+1,",
+			"j-1,",
+			"i-1,",
+			"i+1,",
+			"var j:Int=0;",
+			"var i:Int=0;",
+			"j:Long",
+			"i:Long",
+			"new Location",
+			"j:UInt",
+			"i:UInt",
+			"j:Long",
+			"i:Long",
+			"new Location",
+			"cache",
+			"Task ",
+			"TaskEntry]",
+			"Task]",
+			"(k, v, h)",
+			"(k,v,h)",
+			"HashEntry[K,V]",
+			"getKey",
+			"node",
+			"Node[",
+			"node",
+			"Node[",
+			"node",
+			"Node",
+			"node",
+			"Node[T]",
+			"Node",
+			"node",
+			"Node[T]",
+			"getTaskPlace",
+			"getTask",
+			"_taskMapp",
+			"getTaskPlace",
+			"this",
+			"getNode",
+			"getTaskPlace",
+			"getNode",
+			"allTask",
+			"global",
+			"allTask"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"_localReadyTasks",
+			"_dag.addAndGet",
+			"getNodePlace",
+			"TadaAppDP",
+			"TaskSet",
+			"task",
+			"Task",
+			"NodeSet",
+			"node.",
+			"node:Node",
+			"entry.node",
+			"e.node",
+			"Node",
+			"loc.j",
+			"loc.i",
+			"height",
+			"width",
+			"_dag._local",
+			"localCachedTasks().",
+			"taskEntryRemoved",
+			"taskFinish",
+			"taskIndegree",
+			"taskResult",
+			"Int = 0n;",
+			"i==0n)",
+			"j==0n)",
+			"j==0n",
+			"i==0n",
+			"j+1n)",
+			"j-1n)",
+			"this.width+1n",
+			"this.width-1n",
+			"this.height-1n",
+			"j+1n,",
+			"j-1n,",
+			"i-1n,",
+			"i+1n,",
+			"var j:Int=0n;",
+			"var i:Int=0n;",
+			"j:Int",
+			"i:Int",
+			"j:Long",
+			"i:Long",
+			"j:UInt",
+			"i:UInt",
+			"TasnEntry[T]]",
+			"Task[T]]",
+			"(task, h)",
+			"TaskEntry",
+			"task",
+			"Task[",
+			"task",
+			"Task[",
+			"task",
+			"Task",
+			"Task[T]"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.package_dev":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"dag",
+				"src/tada/dag/Dag.x10"
+			],
+			[
+				"tadaw",
+				"src/tada/TadaWorker.x10"
+			],
+			[
+				"main",
+				"src/Main.x10"
+			],
+			[
+				"tada",
+				"src/tada/Tada.x10"
+			],
+			[
+				"tadawo",
+				"src/tada/TadaWorker.x10"
+			],
+			[
+				"tadawork",
+				"src/tada/TadaWorker.x10"
+			],
+			[
+				"sch",
+				"src/tada/Scheduler.x10"
+			],
+			[
+				"tadawor",
+				"src/tada/TadaWorker.x10"
+			],
+			[
+				"km",
+				"src/demo/kmeans/KMeans.x10"
+			],
+			[
+				"kmean",
+				"src/demo/kmeans/KMeans.cc"
+			],
+			[
+				"node",
+				"src/tada/dag/Node.x10"
+			],
+			[
+				"ver",
+				"src/demo/Viterbi.x10"
+			],
+			[
+				"smi",
+				"src/demo/smithwaterman/SmithWaterman.x10"
+			],
+			[
+				"me",
+				"src/demo/kmeans/MediumResult.x10"
+			],
+			[
+				"k",
+				"src/demo/kmeans/KMPoint.x10"
+			],
+			[
+				"task",
+				"src/tada/dag/Task.x10"
+			],
+			[
+				"test",
+				"src/Test.x10"
+			],
+			[
+				"taskset",
+				"src/tada/dag/TaskSet.x10"
+			],
+			[
+				"nodeset",
+				"src/tada/dag/NodeSet.x10"
+			],
+			[
+				"kme",
+				"src/demo/kmeans/KMeans.x10"
+			],
+			[
+				"word",
+				"src/demo/WordCount.x10"
+			],
+			[
+				"dagj",
+				"src/tada/dag/DagJoin.x10"
+			],
+			[
+				"lcs",
+				"src/demo/LCS.x10"
+			],
+			[
+				"dagjon",
+				"src/tada/dag/DagJoin.x10"
+			],
+			[
+				"dagup",
+				"src/tada/dag/DagUpper.x10"
+			],
+			[
+				"dag12",
+				"src/tada/dag/Dag124.x10"
+			],
+			[
+				"vi",
+				"src/demo/Viterbi.x10"
+			],
+			[
+				"dagu",
+				"src/tada/dag/DagUpper.x10"
+			],
+			[
+				"kmea",
+				"src/demo/kmeans/KMeans.x10"
+			],
+			[
+				"kmp",
+				"src/demo/kmeans/KMPoint.x10"
+			],
+			[
+				"lo",
+				"src/tada/dag/Location.x10"
+			],
+			[
+				"lc",
+				"src/demo/LCS_STR2.txt"
+			],
+			[
+				"tadatask",
+				"src/tada/dag/Task.x10"
+			],
+			[
+				"",
+				"src/Main.cc"
+			],
+			[
+				"sc",
+				"src/tada/Scheduler.x10"
+			],
+			[
+				"con",
+				"src/tada/Configuration.x10"
+			],
+			[
+				"loa",
+				"src/tada/dag/Location.x10"
+			],
+			[
+				"tas",
+				"src/tada/dag/TaskSet.x10"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/Users/hchen/x10_ex/Tada/tada.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 243.0,
+	"status_bar_visible": true
+}
