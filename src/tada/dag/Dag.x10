@@ -7,6 +7,15 @@ import x10.regionarray.Dist;
 import x10.regionarray.DistArray;
 import x10.compiler.NonEscaping;
 
+
+/**
+ * This class is the base class.
+ * We also provide serveral common used DAG class,
+ * But you can always implement your custom DAG class.
+ *
+ * This class handles data/task initialization(distribution),
+ * and transparent fault-tolerance.
+ */
 public abstract class Dag[T]{T haszero} {
 
 	public val width:Int;
@@ -73,7 +82,7 @@ public abstract class Dag[T]{T haszero} {
 				val indegree = getDependencyTasksLocation(i, j).size;
 				this._distAllTasks(point) = new Node[T](indegree);
 				if(indegree==0) {
-					_localReadyTasks().add(loc);	
+					_localReadyTasks().add(loc);
 				}
 			}
 		});
@@ -91,7 +100,7 @@ public abstract class Dag[T]{T haszero} {
 		else
 			return at (place) _distAllTasks(Point.make(i, j));
 	}
-	
+
 	public def getNodePlace(i:Int, j:Int) {
 		return this._taskDist(Point.make(i, j));
 	}
@@ -105,7 +114,7 @@ public abstract class Dag[T]{T haszero} {
 		if(place==here) {
 			val node = _distAllTasks(Point.make(i, j));
 			node.setResult(value);
-			node._isFinish = true; 
+			node._isFinish = true;
 		} else at (place) {
 			val node = _distAllTasks(Point.make(i, j));
 			node.setResult(value);
@@ -164,19 +173,19 @@ public abstract class Dag[T]{T haszero} {
             val firstLoc = this._localReadyTasks().removeFirst();
             return firstLoc;
         } else {
-            this._localReadyTasks().add(loc); 
+            this._localReadyTasks().add(loc);
         }
         return loc;
     }
 
 
     public atomic def addReadyNode(loc:Location) {
-		this._localReadyTasks().add(loc); 
+		this._localReadyTasks().add(loc);
     }
     public atomic def getReadyNode():Location {
 		return this._localReadyTasks().removeFirst();
     }
-    
+
 
     // TODO no use!
     public def setResilientFlag(flag:Boolean) {

@@ -29,10 +29,10 @@ public class Tada[T]{T haszero} {
 			} catch(es:MultipleExceptions) {
 				recover();
 				continue;
-			}	
+			}
 			break;
 		}
-		
+
 
 		time += System.currentTimeMillis();
 		Console.OUT.println("\nspend time:"+time+"ms\n");
@@ -80,7 +80,6 @@ public class Tada[T]{T haszero} {
 			return true;		// task is over
 		}
 	}
-
 
 
 }
