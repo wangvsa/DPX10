@@ -1,3 +1,5 @@
 *.out
 *.h
 *.cc
+*.sublime-project
+*.sublime-workspace
