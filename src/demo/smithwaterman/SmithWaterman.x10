@@ -50,6 +50,7 @@ public class SmithWaterman extends TadaAppDP[Int] {
 			}
 		}
 
+		System.sleep(200);
 		return Math.max(v1, Math.max(v2, v3));
 	}
 

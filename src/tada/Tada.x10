@@ -20,19 +20,36 @@ public class Tada[T]{T haszero} {
 
 		var time:Long = -System.currentTimeMillis();
 
-		finish for(p in Place.places()) async at(p) {
-			val worker = new TadaWorker[T](_app, _dag);
-			worker.execute();
+		while(true) {
+			try {
+				finish for(p in Place.places()) async at(p) {
+					val worker = new TadaWorker[T](_app, _dag);
+					worker.execute();
+				}
+			} catch(es:MultipleExceptions) {
+				recover();
+				continue;
+			}	
+			break;
 		}
-
-		_dag.resilient();
+		
 
 		time += System.currentTimeMillis();
 		Console.OUT.println("\nspend time:"+time+"ms\n");
 
-		//this._dag.printIndegreeMatrix();
-		//this._dag.printResultMatrix();
-		//this._app.taskFinished(_dag);
+		this._dag.printIndegreeMatrix();
+		this._dag.printResultMatrix();
+		this._app.taskFinished(_dag);
+	}
+
+	private def recover() {
+		var t:Long = -System.currentTimeMillis();
+		Console.OUT.println("captured by Tada, enter resilient mode.");
+		_dag.resilient();
+		t += System.currentTimeMillis();
+		Console.OUT.println("resilient finish, spend time:"+t+"ms");
+		this._dag.printIndegreeMatrix();
+		this._dag.printResultMatrix();
 	}
 
 

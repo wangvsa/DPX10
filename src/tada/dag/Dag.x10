@@ -16,7 +16,7 @@ public abstract class Dag[T]{T haszero} {
 	public var _taskRegion : Region;
 	public var _taskDist : Dist;
 
-	public var _resilientFalg : Boolean = false;
+	public var _resilientFlag : GlobalRef[Cell[Boolean]];
 
 
 	// 所有任务，TadaWorker可以从任意Place访问
@@ -46,6 +46,7 @@ public abstract class Dag[T]{T haszero} {
             (Place.places(), ()=>new AtomicInteger(0n), (p:Place)=>true);
 		this._globalPlaceStatus = PlaceLocalHandle.makeFlat[Rail[Int]]
             (Place.places(), ()=>new Rail[Int](Place.numPlaces()), (p:Place)=>true);
+        this._resilientFlag = GlobalRef[Cell[Boolean]](new Cell[Boolean](false));
 
 		initRegionAndDist();
 		this._distAllTasks = DistArray.make[Node[T]](_taskDist);
@@ -175,60 +176,42 @@ public abstract class Dag[T]{T haszero} {
     public atomic def getReadyNode():Location {
 		return this._localReadyTasks().removeFirst();
     }
+    
 
-
-
-    // 检查是否还有正在执行任务的Activity
-    public def hasLiveActivity():Boolean {
-    	var count:Int = 0n;
-    	finish for (place in Place.places()) {
-    		count += at(place) this._localActivityCount().get();
-    	}
-    	if(count==0n)
-    		return true;
-    	return false;
+    // TODO no use!
+    public def setResilientFlag(flag:Boolean) {
+    	at(Place(0)) _resilientFlag()() = flag;
     }
 
-
 	public def resilient() {
-		if(hasLiveActivity()) {
-			Console.OUT.println("still has live activity!");
-			return;
-		}
-
-		this._resilientFalg = true;
+		setResilientFlag(true);
 		remakeDistArray();
-		this._resilientFalg = false;
+		setResilientFlag(false);
 	}
 
 
     public def remakeDistArray() {
 
-    	var time:Long = -System.currentTimeMillis();
-    	Console.OUT.println("remake...");
-
     	val livePlaces = Place.places();
-    	var dist:Dist;
+    	var newDist:Dist;
     	if(this.height==1n)
-    		dist = Dist.makeBlock(_distAllTasks.dist.region, 1n, livePlaces);
+    		newDist = Dist.makeBlock(_distAllTasks.dist.region, 1n, livePlaces);
 		else
-    		dist = Dist.makeBlock(_distAllTasks.dist.region, 0n, livePlaces);
+    		newDist = Dist.makeBlock(_distAllTasks.dist.region, 0n, livePlaces);
 
-    	val newArray = DistArray.make[Node[T]](dist);
+    	val newArray = DistArray.make[Node[T]](newDist);
 
-    	// 第一次遍历将原来的结果复制过来，初始化挂掉的Place中的节点
+    	// 第一次遍历将原来的结果复制过来，初始化挂掉的Place中的节点入度
     	livePlaces.broadcastFlat(()=>{
 			val it = newArray.getLocalPortion().iterator();
 			while(it.hasNext()) {
 				val point = it.next();
+				val indegree = getDependencyTasksLocation(point(0) as Int, point(1) as Int).size;
+				newArray(point) = new Node[T](indegree);
+				// 复制原来结果
 				if(_distAllTasks.dist(point)==here) {
-					newArray(point) = _distAllTasks(point);
-				} else {
-					// init
-					val i = point(0) as Int;
-					val j = point(1) as Int;
-					val indegree = getDependencyTasksLocation(i, j).size;
-					newArray(point) = new Node[T](indegree);
+					newArray(point).setResult(_distAllTasks(point).getResult());
+					newArray(point)._isFinish = _distAllTasks(point)._isFinish;
 				}
 			}
     	});
@@ -248,8 +231,8 @@ public abstract class Dag[T]{T haszero} {
 			        	val p = Point.make(loc.i, loc.j);
 			        	at(newArray.dist(p)) {
 			        		val indegree = newArray(p).decrementIndegree();
-			        		if(indegree==0) {
-			        			newReadyTasks().add(new Location(point(0) as Int, point(1) as Int));
+			        		if(indegree==0 && !newArray(p)._isFinish) {
+			        			newReadyTasks().add(new Location(p(0) as Int, p(1) as Int));
 			        		}
 			        	}
 			        }
@@ -257,11 +240,9 @@ public abstract class Dag[T]{T haszero} {
 			}
 		}
 
+		this._taskDist = newDist;
     	this._distAllTasks = newArray;
     	this._localReadyTasks = newReadyTasks;
-
-    	time += System.currentTimeMillis();
-    	Console.OUT.println("remake finish, spend time:"+time);
     }
 
 

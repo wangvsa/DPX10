@@ -54,7 +54,11 @@ public class Dag124[T]{T haszero} extends Dag[T] {
 		Console.OUT.println("indegree matrix:");
 		for(var i:Int=0n;i<height;i++) {
 			for (var j:Int=0n; j<width; j++) {
-    			Console.OUT.print(getNode(i, j).getIndegree()+" ");
+				val node = getNode(i, j);
+				if(!node._isFinish)
+    				Console.OUT.print(getNode(i, j).getIndegree());
+    			else
+    				Console.OUT.print("f");
 			}
 			Console.OUT.println();
 		}

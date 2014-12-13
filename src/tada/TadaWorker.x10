@@ -11,7 +11,7 @@ public class TadaWorker[T]{T haszero} {
     public val _dag:Dag[T];
     private transient val _scheduler:Scheduler[T];
 
-    public var totalCount:Long = 0;
+    public var finishCount:Long = 0;
 
     public def this(app:TadaApp[T], dag:Dag[T]) {
         this._app = app;
@@ -23,16 +23,24 @@ public class TadaWorker[T]{T haszero} {
     // 开始调度本地的任务，由Tada在各个Place调用
     public def execute() {
 
+        val it = _dag._distAllTasks.getLocalPortion().iterator();
+        while(it.hasNext()) {
+            val node = _dag._distAllTasks(it.next());
+            if(node._isFinish)
+                finishCount++;
+        }
         val totalSize = _dag._distAllTasks.getLocalPortion().size;
 
-        Console.OUT.println(here+" running on "+Runtime.getName()+", task size:"+totalSize);
+        Console.OUT.println(here+" running on "+Runtime.getName()+", finishCount:"+finishCount+", totalCount"+totalSize);
 
         while(true) {
 
             scheduleReadyTasks();
 
             Runtime.probe();
-            if(totalCount==totalSize)
+            if(finishCount==totalSize)
+                break;
+            if(_dag._resilientFlag.getLocalOrCopy()())
                 break;
         }
 
@@ -51,15 +59,18 @@ public class TadaWorker[T]{T haszero} {
             //val loc = _dag.addAndGet(nullLoc);
             val loc = _dag.getReadyNode();
             locList.add(loc);
-            totalCount++;
+            finishCount++;
         }
 
         if(!locList.isEmpty()) {
             // 随机调度
             // async at(Scheduler.randomSchedule()) doTasks(locList);
+
             // 本地调度
-            // async doTasks(locList);
+            async doTasks(locList);
+
             // 最少依赖调度
+            /*
             val place = _scheduler.leastDepdencySchedule(locList);
             if(place==here)
                 async doTasks(locList);
@@ -67,13 +78,19 @@ public class TadaWorker[T]{T haszero} {
                 Console.OUT.println(here+" change to "+place+", task size:"+locList.size());
                 async at(place) doTasks(locList);
             }
+            */
         }
     }
 
     
     private def doTasks(locList:ArrayList[Location]) {
-        for(loc in locList)
-            work(loc.i, loc.j);
+        try {
+            for(loc in locList)
+                work(loc.i, loc.j);
+        } catch(e:DeadPlaceException) {
+            _dag.setResilientFlag(true);
+            Console.OUT.println("captured by Worker "+here);
+        }
     }
 
 
@@ -97,9 +114,10 @@ public class TadaWorker[T]{T haszero} {
         }
 
         time += System.currentTimeMillis();
-        Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
 
         _dag._localActivityCount().incrementAndGet();
+
+        Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
     }
 
 
