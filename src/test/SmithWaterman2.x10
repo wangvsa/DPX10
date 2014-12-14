@@ -9,7 +9,7 @@ import x10.util.concurrent.AtomicInteger;
 
 /**
  * This is used for comparision with Tada
- * This is a SW implementation using only X10
+ * This is the distributed version of SmithWaterman algorithm wirtten by X10 only
  */
 public class SmithWaterman2 {
 
@@ -74,10 +74,27 @@ public class SmithWaterman2 {
                         val i = point(0);
                         val j = point(1);
 
-                        node.score = MATCH_SCORE;
+                        // compute the score
+                        if(i==0 && j==0) {
+                            node.score = str1.charAt(i as Int)==str2.charAt(j as Int) ? MATCH_SCORE : DISMATCH_SCORE;
+                        } else if(i==0) {
+                            node.score = at(dist(i, j-1)) distMatrix(i, j-1).score + GAP_PENALTY;
+                        } else if(j==0) {
+                            node.score = at(dist(i-1, j)) distMatrix(i-1, j).score + GAP_PENALTY;
+                        } else {
+                            var v1:Int = at(dist(i-1, j-1)) distMatrix(i-1, j-1).score;
+                            v1 += str1.charAt(i as Int)==str2.charAt(j as Int) ? MATCH_SCORE : DISMATCH_SCORE;
+                            var v2:Int = at(dist(i-1, j)) distMatrix(i-1, j).score + GAP_PENALTY;
+                            var v3:Int = at(dist(i, j-1)) distMatrix(i, j-1).score + GAP_PENALTY;
+                            node.score = Math.max(v1, Math.max(v2, v3));
+                        }
+
+
+                        // set the finish flag and increment the count
                         node.isFinish = true;
                         finishCount++;
 
+                        // decrement the indegree of dependent nodes
                         if (i==M-1 && j==N-1) {
                             break;
                         } else if (i==M-1) {
@@ -90,7 +107,7 @@ public class SmithWaterman2 {
                             at(dist(i+1, j+1)) distMatrix(i+1, j+1).indegree.decrementAndGet();
                         }
 
-                        Console.OUT.println("work "+i+","+j+", finishCount:"+finishCount+" "+here);
+                        //Console.OUT.println("work "+i+","+j+", finishCount:"+finishCount+" "+here);
                     }
                 }
 
@@ -99,9 +116,12 @@ public class SmithWaterman2 {
                     break;
             }
         }
-}
 
-    private def walkback(matrix:Array_2[Int]) {
+        printMatrix(dist, distMatrix);
+        walkback(dist, distMatrix);
+    }
+
+    private def walkback(dist:Dist, distMatrix:DistArray[SWNode]) {
         var i:Int = str1.length() as Int - 1n;
         var j:Int = str2.length() as Int - 1n;
         while(true) {
@@ -115,9 +135,10 @@ public class SmithWaterman2 {
             else
                 Console.OUT.print("-");
 
-            val left = matrix(i-1, j);
-            val up = matrix(i, j-1);
-            val leftup = matrix(i-1, j-1);
+            val tmpi = i, tmpj = j;
+            val left = at(dist(tmpi-1, tmpj)) distMatrix(tmpi-1, tmpj).score;
+            val up = at(dist(tmpi, tmpj-1)) distMatrix(tmpi, tmpj-1).score;
+            val leftup = at(dist(tmpi-1, tmpj-1)) distMatrix(tmpi-1, tmpj-1).score;
 
             if(left >= up && left >= leftup) {
                 i = i - 1n;
@@ -138,11 +159,11 @@ public class SmithWaterman2 {
 
         for(var i:Long=0;i<M;i++) {
             for (var j:Long=0; j<N; j++) {
-            	val tmpi = i;
-            	val tmpj = j;
-            	val p = dist(i, j);
-            	at(p) Console.OUT.println(here+" "+tmpi+","+tmpj+":"+distMatrix(tmpi, tmpj).score);
+                val tmpi = i, tmpj = j;
+            	val score = at(dist(tmpi, tmpj)) distMatrix(tmpi, tmpj).score;
+                Console.OUT.print(score+" ");
             }
+            Console.OUT.println();
         }
     }
 

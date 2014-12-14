@@ -31,31 +31,31 @@ public class SmithWaterman extends TadaAppDP[Int] {
 
 	public def compute(i:Int, j:Int, tasks:Rail[Task[Int]]):Int {
 
-		if(i==0n && j==0n)
-			return str1.charAt(0n)==str2.charAt(0n) ? MATCH_SCORE : DISMATCH_SCORE;
-		var v1:Int=0n; var v2:Int=DISMATCH_SCORE, v3:Int=DISMATCH_SCORE;
-
-		for(k in 0..(tasks.size-1)) {
-			val loc = tasks(k)._loc;
-			val score = tasks(k).getResult();
-			if(loc.i==i-1n && loc.j==j-1n) {
-				val c1 = str1.charAt(i as Int);
-				val c2 = str2.charAt(j as Int);
-				if(c1==c2)
-					v1 = score + MATCH_SCORE;
-				else
-					v1 = score + DISMATCH_SCORE;
+		// compute the score
+        if(i==0n && j==0n) {
+            return str1.charAt(i)==str2.charAt(j) ? MATCH_SCORE : DISMATCH_SCORE;
+        } else if(i==0n || j==0n) {
+            return tasks(0).getResult() + GAP_PENALTY;
+        } else {
+        	var lefttop:Int = 0n, left:Int = 0n, top:Int = 0n;
+        	for(k in 0..(tasks.size-1)) {
+				val loc = tasks(k)._loc;
+				if(loc.i==i-1n && loc.j==j-1n)
+					lefttop = tasks(k).getResult();
+				else if(loc.i==i-1n && loc.j==j)
+					top = tasks(k).getResult();
+				else if(loc.i==i && loc.j==j-1n)
+					left = tasks(k).getResult();
 			}
-			if(loc.j==j && loc.i==i-1n)
-				v2 = score + GAP_PENALTY;
-			if(loc.i==i && loc.j==j-1n)
-				v3 = score + GAP_PENALTY;
-		}
+            val v1 = lefttop + (str1.charAt(i)==str2.charAt(j) ? MATCH_SCORE : DISMATCH_SCORE);
+            val v2 = left + GAP_PENALTY;
+            val v3 = top + GAP_PENALTY;
 
-		//System.sleep(200);
-		if(tasks.size==1)		// first row or first column
-			return Math.max(v2, v3);
-		return Math.max(v1, Math.max(v2, v3));
+            return Math.max(v1, Math.max(v2, v3));
+        }
+
+		// using for kill, when test fault-tolerance
+		// System.sleep(200);
 	}
 
 	public def taskFinished(dag:Dag[Int]):void {

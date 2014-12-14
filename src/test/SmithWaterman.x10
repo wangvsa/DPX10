@@ -4,7 +4,7 @@ import x10.array.Array_2;
 
 /**
  * This is used for comparision with Tada
- * This is a SW implementation using only X10
+ * This is the serial version of SmithWaterman algorithm written by X10 only
  */
 public class SmithWaterman {
 
@@ -36,20 +36,24 @@ public class SmithWaterman {
         val N = str2.length();
 
         // score matrix, init with zero
-        val matrix = new Array_2[Int](M+1, N+1, 0n);
+        val matrix = new Array_2[Int](M, N, 0n);
 
-        var v1:Int=0n, v2:Int=0n, v3:Int=0n;
-        for (var i:Long=1; i<=M; i++) {
-            for (var j:Long=1; j<=N; j++) {
-                val c1 = str1.charAt((i-1) as Int);
-                val c2 = str2.charAt((j-1) as Int);
-                if(c1==c2)
-                    v1 = matrix(i-1, j-1) + MATCH_SCORE;
-                else
-                    v1 = matrix(i-1, j-1) + DISMATCH_SCORE;
-                v2 = matrix(i-1, j) + GAP_PENALTY;
-                v3 = matrix(i, j-1) + GAP_PENALTY;
-                matrix(i, j) = Math.max(v1, Math.max(v2, v3));
+        for (var i:Long=0; i<M; i++) {
+            for (var j:Long=0; j<N; j++) {
+                // compute the score
+                if(i==0 && j==0) {
+                    matrix(i, j) = str1.charAt(i as Int)==str2.charAt(j as Int) ? MATCH_SCORE : DISMATCH_SCORE;
+                } else if(i==0) {
+                    matrix(i, j) = matrix(i, j-1) + GAP_PENALTY;
+                } else if(j==0) {
+                    matrix(i, j) = matrix(i-1, j) + GAP_PENALTY;
+                } else {
+                    var v1:Int = matrix(i-1, j-1);
+                    v1 += str1.charAt(i as Int)==str2.charAt(j as Int) ? MATCH_SCORE : DISMATCH_SCORE;
+                    var v2:Int = matrix(i-1, j) + GAP_PENALTY;
+                    var v3:Int = matrix(i, j-1) + GAP_PENALTY;
+                    matrix(i, j) = Math.max(v1, Math.max(v2, v3));
+                }
             }
         }
 
@@ -90,8 +94,8 @@ public class SmithWaterman {
 
     private def printMatrix(matrix:Array_2[Int]) {
         Console.OUT.println("matrix:");
-        for (var i:Long=1; i<matrix.numElems_1; i++) {
-            for (var j:Long=1; j<matrix.numElems_2; j++) {
+        for (var i:Long=0; i<matrix.numElems_1; i++) {
+            for (var j:Long=0; j<matrix.numElems_2; j++) {
                 Console.OUT.print(matrix(i, j)+" ");
             }
             Console.OUT.println();
