@@ -1,11 +1,6 @@
 import x10.io.File;
 import x10.io.IOException;
 import x10.array.Array_2;
-import x10.regionarray.Region;
-import x10.regionarray.Dist;
-import x10.regionarray.DistArray;
-import x10.util.concurrent.AtomicInteger;
-
 
 /**
  * This is used for comparision with Tada
@@ -62,64 +57,6 @@ public class SmithWaterman {
         walkback(matrix);
     }
 
-    private def sw_distributed() {
-        val M = str1.length();
-        val N = str2.length();
-
-        // distributed score matrix, init with zero
-        val region = Region.make(0..(M-1n), 0..(N-1n));
-        val dist = Dist.makeBlock(region, 1);
-        val distMatrix = DistArray.make[SWNode](dist);
-        Place.places().broadcastFlat(()=>{
-            val it = distMatrix.getLocalPortion().iterator();
-            while(it.hasNext()) {
-                val point:Point = it.next();
-                var indegree:Int = 3n;
-                if(point(0)==0 && point(1)==0)
-                    indegree = 0n;
-                else if(point(0)==0 || point(1)==0)
-                    indegree = 1n;
-                distMatrix(point) = new SWNode(indegree);
-            }
-        });
-
-        // start
-        Place.places().broadcastFlat(()=>{
-            val allNodeCount = distMatrix.getLocalPortion().size;
-            var finishCount:Long = 0;
-            while(true) {
-                val it = distMatrix.getLocalPortion().iterator();
-                while(it.hasNext()) {
-                    val node:SWNode = distMatrix(it.next());
-                    // real work here
-                    if(node.indegree.get()==0n && !node.isFinish) {
-                        val i = it.next()(0);
-                        val j = it.next()(1);
-
-                        node.score = MATCH_SCORE;
-                        node.isFinish = true;
-                        finishCount++;
-                        Console.OUT.println("work "+i+", "+j);
-
-                        if (i==M-1 && j==N-1) {
-                            break;
-                        } else if (i==M-1) {
-                            at(dist(i, j+1)) distMatrix(i, j+1).indegree.decrementAndGet();
-                        } else if (j==N-1) {
-                            at(dist(i+1, j)) distMatrix(i+1, j).indegree.decrementAndGet();
-                        } else {
-                            at(dist(i+1, j+1)) distMatrix(i+1, j+1).indegree.decrementAndGet();
-                        }
-                    }
-                }
-
-                // local task finished
-                if (finishCount == allNodeCount)
-                    break;
-            }
-        });
-    }
-
     private def walkback(matrix:Array_2[Int]) {
         var i:Int = str1.length() as Int - 1n;
         var j:Int = str2.length() as Int - 1n;
@@ -163,20 +100,8 @@ public class SmithWaterman {
 
 
     public static def main(args:Rail[String]) {
-        //new SmithWaterman().sw();
-        new SmithWaterman().sw_distributed();
+        new SmithWaterman().sw();
     }
 
-    public static class SWNode {
-        public var indegree:AtomicInteger;
-        public var score:Int;
-        public var isFinish:Boolean;
-
-        public def this(indegree:Int) {
-            this.score = 0n;
-            this.indegree = new AtomicInteger(indegree);
-            this.isFinish = false;
-        }
-    }
 
 }
