@@ -3,6 +3,9 @@ import tada.*;
 import tada.dag.*;
 import demo.*;
 import demo.smithwaterman.*;
+import demo.lcs.*;
+import demo.knapsack.*;
+
 
 public class Main {
 
@@ -17,6 +20,8 @@ public class Main {
 			viterbi();
 		if(choose.equals("wc"))
 			wordCount();
+		if(choose.equals("knap"))
+			knap();
 	}
 
 	private static def lcs() {
@@ -42,6 +47,12 @@ public class Main {
 	private static def wordCount() {
 		val dag = new DagJoin[HashMap[String, Int]](WordCount.articles.size as Int);
 		val tada = new Tada[HashMap[String, Int]](new WordCount(), dag);
+		tada.start();
+	}
+
+	private static def knap() {
+		val dag = new KnapsackDag[Int](Knapsack.ITEM_NUM, Knapsack.CAPICITY);
+		val tada = new Tada[Int](new Knapsack(), dag);
 		tada.start();
 	}
 
