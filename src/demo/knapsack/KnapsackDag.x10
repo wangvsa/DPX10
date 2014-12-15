@@ -10,16 +10,16 @@ public class KnapsackDag[T]{T haszero} extends Dag[T] {
 
     public def getDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
         val locs:Rail[Location];
-        if( i == 0n ) {
+        if( i == 0n || j == 0n ) {
             locs = new Rail[Location](0);
         } else {
-            if( j - Knapsack.weight(i) < 0 ) {
-                locs = new Rail[Location](1);
-                locs(0) = new Location(i-1n, j);
-            } else {
+            if( Knapsack.weight(i-1) <= j ) {
                 locs = new Rail[Location](2);
                 locs(0) = new Location(i-1n, j);
-                locs(1) = new Location(i, j-Knapsack.weight(i));
+                locs(1) = new Location(i-1n, j-Knapsack.weight(i-1));
+            } else {
+                locs = new Rail[Location](1);
+                locs(0) = new Location(i-1n, j);
             }
         }
 
@@ -29,25 +29,43 @@ public class KnapsackDag[T]{T haszero} extends Dag[T] {
 
     public def getAntiDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
         val locs:Rail[Location];
-        if( i == Knapsack.ITEM_NUM-1n) {
-            if( j+Knapsack.weight(i) >= Knapsack.CAPICITY ) {
+        if ( i == 0n ) {
+            locs = [new Location(i+1n, j)];
+        } else if( i == Knapsack.ITEM_NUM ) {
+            if( j+Knapsack.weight(i-1) > Knapsack.CAPICITY ) {
                 locs = new Rail[Location](0);
             } else {
                 locs = new Rail[Location](1);
-                locs(0) = new Location(i, j+Knapsack.weight(i));
+                locs(0) = new Location(i, j+Knapsack.weight(i-1));
             }
         } else {
-            if( j+Knapsack.weight(i) >= Knapsack.CAPICITY ) {
+            if( j+Knapsack.weight(i-1) > Knapsack.CAPICITY ) {
                 locs = new Rail[Location](1);
                 locs(0) = new Location(i+1n, j);
             } else {
                 locs = new Rail[Location](2);
                 locs(0) = new Location(i+1n, j);
-                locs(1) = new Location(i, j+Knapsack.weight(i));
+                locs(1) = new Location(i, j+Knapsack.weight(i-1));
             }
         }
 
         return locs;
+    }
+
+    // 覆盖父类输出入度矩阵函数
+    public def printIndegreeMatrix() {
+        Console.OUT.println("indegree matrix:");
+        for(var i:Int=0n;i<height;i++) {
+            for (var j:Int=0n; j<width; j++) {
+                val node = getNode(i, j);
+                if(!node._isFinish)
+                    Console.OUT.print(getNode(i, j).getIndegree());
+                else
+                    Console.OUT.print("f");
+            }
+            Console.OUT.println();
+        }
+        Console.OUT.println();
     }
 
     // 覆盖父类输出结果矩阵函数

@@ -34,13 +34,8 @@ public abstract class Dag[T]{T haszero} {
   	public var _localReadyTasks:PlaceLocalHandle[ArrayList[Location]];
   	// 获取依赖任务时，将异地的任务缓存下来，TadaWorker可以从自己的Place访问
     public val _localCachedTasks:PlaceLocalHandle[TaskSet[T]];
-    // 每个Place的活动数
-    public val _localActivityCount:PlaceLocalHandle[AtomicInteger];
 
 
-
-    // 通过一段时间内执行的任务数来记录所有Place的工作状态
-    public val _globalPlaceStatus:PlaceLocalHandle[Rail[Int]];
 
 	public def this(height:Int, width:Int) {
 		this.taskSize = height * width;
@@ -51,10 +46,6 @@ public abstract class Dag[T]{T haszero} {
             (Place.places(), ()=>new ArrayList[Location](), (p:Place)=>true);
 		this._localCachedTasks = PlaceLocalHandle.makeFlat[TaskSet[T]]
             (Place.places(), ()=>new TaskSet[T](), (p:Place)=>true);
-		this._localActivityCount = PlaceLocalHandle.makeFlat[AtomicInteger]
-            (Place.places(), ()=>new AtomicInteger(0n), (p:Place)=>true);
-		this._globalPlaceStatus = PlaceLocalHandle.makeFlat[Rail[Int]]
-            (Place.places(), ()=>new Rail[Int](Place.numPlaces()), (p:Place)=>true);
         this._resilientFlag = GlobalRef[Cell[Boolean]](new Cell[Boolean](false));
 
 		initRegionAndDist();

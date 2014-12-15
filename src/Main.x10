@@ -51,7 +51,7 @@ public class Main {
 	}
 
 	private static def knap() {
-		val dag = new KnapsackDag[Int](Knapsack.ITEM_NUM, Knapsack.CAPICITY);
+		val dag = new KnapsackDag[Int](Knapsack.ITEM_NUM+1n, Knapsack.CAPICITY+1n);
 		val tada = new Tada[Int](new Knapsack(), dag);
 		tada.start();
 	}

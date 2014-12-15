@@ -6,7 +6,7 @@ import tada.dag.*;
 import tada.Tada.TadaApp;
 
 public class TadaWorker[T]{T haszero} {
- 
+
     public val _app:TadaApp[T];
     public val _dag:Dag[T];
     private transient val _scheduler:Scheduler[T];
@@ -82,7 +82,7 @@ public class TadaWorker[T]{T haszero} {
         }
     }
 
-    
+
     private def doTasks(locList:ArrayList[Location]) {
         try {
             for(loc in locList)
@@ -95,10 +95,8 @@ public class TadaWorker[T]{T haszero} {
 
 
     private def work(i:Int, j:Int) {
-        _dag._localActivityCount().incrementAndGet();
-
         var time:Long = -System.currentTimeMillis();
-        
+
         val tasks = _dag.getDependencyTasks(i, j);
 
         // do the real computing.
@@ -109,14 +107,12 @@ public class TadaWorker[T]{T haszero} {
 
         // 将依赖(i,j)的节点入度减一
         val locs = _dag.getAntiDependencyTasksLocation(i, j);
+
         for(loc in locs) {
             _dag.decrementIndegree(loc.i, loc.j);
         }
 
         time += System.currentTimeMillis();
-
-        _dag._localActivityCount().incrementAndGet();
-
         Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
     }
 

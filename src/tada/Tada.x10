@@ -20,6 +20,8 @@ public class Tada[T]{T haszero} {
 
 		var time:Long = -System.currentTimeMillis();
 
+		this._dag.printIndegreeMatrix();
+
 		while(true) {
 			try {
 				finish for(p in Place.places()) async at(p) {
