@@ -33,7 +33,7 @@ public abstract class Dag[T]{T haszero} {
   	// 所有的就绪任务(入度为零)，TadaWorker可以从自己的Place访问自己的就绪任务列表
   	public var _localReadyTasks:PlaceLocalHandle[ArrayList[Location]];
   	// 获取依赖任务时，将异地的任务缓存下来，TadaWorker可以从自己的Place访问
-    public val _localCachedTasks:PlaceLocalHandle[TaskSet[T]];
+    public val _localCachedTasks:PlaceLocalHandle[CacheList[T]];
 
 
 
@@ -44,8 +44,8 @@ public abstract class Dag[T]{T haszero} {
 
 		this._localReadyTasks = PlaceLocalHandle.makeFlat[ArrayList[Location]]
             (Place.places(), ()=>new ArrayList[Location](), (p:Place)=>true);
-		this._localCachedTasks = PlaceLocalHandle.makeFlat[TaskSet[T]]
-            (Place.places(), ()=>new TaskSet[T](), (p:Place)=>true);
+		this._localCachedTasks = PlaceLocalHandle.makeFlat[CacheList[T]]
+            (Place.places(), ()=>new CacheList[T](10n), (p:Place)=>true);
         this._resilientFlag = GlobalRef[Cell[Boolean]](new Cell[Boolean](false));
 
 		initRegionAndDist();
@@ -145,12 +145,12 @@ public abstract class Dag[T]{T haszero} {
                 val node = this._distAllTasks(Point.make(loc.i, loc.j));
                 tasks(k) = new Task[T](loc, node);
             } else {
-                if(this._localCachedTasks().containsKey(loc)) {
-                    tasks(k) = this._localCachedTasks()(loc);
+                if(this._localCachedTasks().containsKey(loc.i, loc.j)) {
+                    tasks(k) = this._localCachedTasks().get(loc.i, loc.j);
                 } else {
                     val node = at(place) this._distAllTasks(Point.make(loc.i, loc.j));
                     tasks(k) = new Task[T](loc, node);
-                    //this._localCachedTasks().put(tasks(k));    // cache it
+                    this._localCachedTasks().add(tasks(k));  // cache it
                 }
             }
         }

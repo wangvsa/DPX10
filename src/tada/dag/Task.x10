@@ -1,7 +1,8 @@
 package tada.dag;
 
-/** 
- *	用来将结果返回给用户
+/**
+ *	用来将结果返回给用户(in compute function)
+ *	Also used in Cache List
  */
 public class Task[T]{T haszero} {
 
@@ -20,7 +21,7 @@ public class Task[T]{T haszero} {
 
 
 	public def getResult() {
-		return this._result;	
+		return this._result;
 	}
 
 }

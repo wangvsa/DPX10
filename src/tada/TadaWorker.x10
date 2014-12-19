@@ -44,7 +44,6 @@ public class TadaWorker[T]{T haszero} {
                 break;
         }
 
-        Console.OUT.println(here+" cache size:"+_dag._localCachedTasks().size());
     }
 
 
@@ -113,7 +112,7 @@ public class TadaWorker[T]{T haszero} {
         }
 
         time += System.currentTimeMillis();
-        Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
+        //Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
     }
 
 

@@ -21,30 +21,32 @@ public class SmithWaterman2 {
     static val DISMATCH_SCORE = -1n;
     static val GAP_PENALTY = -1n;       // use linear gap penalty
 
+
+    private val dist:Dist;
+    private val distMatrix:DistArray[SWNode];
+
+
     // read the same string from Tada's demo
     public def this() {
         str1 = new String();
         str2 = new String();
         try {
-            val input1 = new File("../demo/smithwaterman/SW_STR1.txt");
+            val input1 = new File("../../demo/smithwaterman/SW_STR1.txt");
             for(line in input1.lines())
                 str1 += line;
-            val input2 = new File("../demo/smithwaterman/SW_STR2.txt");
+            val input2 = new File("../../demo/smithwaterman/SW_STR2.txt");
             for(line in input2.lines())
                 str2 += line;
         } catch(IOException) {}
         Console.OUT.println("str1.length:"+str1.length()+", str2.length:"+str2.length());
+
+        val region = Region.make(0..(str1.length()-1n), 0..(str2.length()-1n));
+        this.dist = Dist.makeBlock(region, 1);
+        this.distMatrix = DistArray.make[SWNode](this.dist);
     }
 
-
-    private def sw() {
-        val M = str1.length();
-        val N = str2.length();
-
-        // distributed score matrix, init with zero
-        val region = Region.make(0..(M-1n), 0..(N-1n));
-        val dist = Dist.makeBlock(region, 1);
-        val distMatrix = DistArray.make[SWNode](dist);
+    // Init distributed score matrix with zero
+    private def init() {
         Place.places().broadcastFlat(()=>{
             val it = distMatrix.getLocalPortion().iterator();
             while(it.hasNext()) {
@@ -57,12 +59,18 @@ public class SmithWaterman2 {
                 distMatrix(point) = new SWNode(indegree);
             }
         });
+    }
+
+    private def sw() {
+        val M = str1.length();
+        val N = str2.length();
 
         // start
-        for (p in Place.places()) at(p) {
+        finish
+        for (p in Place.places()) async at(p) {
             val allNodeCount = distMatrix.getLocalPortion().size;
             var finishCount:Long = 0;
-            Console.OUT.println("all nodes count:"+allNodeCount);
+            Console.OUT.println(here+" all nodes count:"+allNodeCount);
             while(true) {
                 val it = distMatrix.getLocalPortion().iterator();
                 while(it.hasNext()) {
@@ -88,7 +96,6 @@ public class SmithWaterman2 {
                             var v3:Int = at(dist(i, j-1)) distMatrix(i, j-1).score + GAP_PENALTY;
                             node.score = Math.max(v1, Math.max(v2, v3));
                         }
-
 
                         // set the finish flag and increment the count
                         node.isFinish = true;
@@ -117,11 +124,9 @@ public class SmithWaterman2 {
             }
         }
 
-        printMatrix(dist, distMatrix);
-        walkback(dist, distMatrix);
     }
 
-    private def walkback(dist:Dist, distMatrix:DistArray[SWNode]) {
+    private def walkback() {
         var i:Int = str1.length() as Int - 1n;
         var j:Int = str2.length() as Int - 1n;
         while(true) {
@@ -136,9 +141,9 @@ public class SmithWaterman2 {
                 Console.OUT.print("-");
 
             val tmpi = i, tmpj = j;
-            val left = at(dist(tmpi-1, tmpj)) distMatrix(tmpi-1, tmpj).score;
-            val up = at(dist(tmpi, tmpj-1)) distMatrix(tmpi, tmpj-1).score;
-            val leftup = at(dist(tmpi-1, tmpj-1)) distMatrix(tmpi-1, tmpj-1).score;
+            val left = at(this.dist(tmpi-1, tmpj)) this.distMatrix(tmpi-1, tmpj).score;
+            val up = at(this.dist(tmpi, tmpj-1)) this.distMatrix(tmpi, tmpj-1).score;
+            val leftup = at(this.dist(tmpi-1, tmpj-1)) this.distMatrix(tmpi-1, tmpj-1).score;
 
             if(left >= up && left >= leftup) {
                 i = i - 1n;
@@ -153,14 +158,14 @@ public class SmithWaterman2 {
         Console.OUT.println();
     }
 
-    private def printMatrix(dist:Dist, distMatrix:DistArray[SWNode]) {
+    private def printMatrix() {
         val M = str1.length();
         val N = str2.length();
 
         for(var i:Long=0;i<M;i++) {
             for (var j:Long=0; j<N; j++) {
                 val tmpi = i, tmpj = j;
-            	val score = at(dist(tmpi, tmpj)) distMatrix(tmpi, tmpj).score;
+            	val score = at(this.dist(tmpi, tmpj)) this.distMatrix(tmpi, tmpj).score;
                 Console.OUT.print(score+" ");
             }
             Console.OUT.println();
@@ -169,7 +174,11 @@ public class SmithWaterman2 {
 
 
     public static def main(args:Rail[String]) {
-        new SmithWaterman2().sw();
+        val smithwaterman = new SmithWaterman2();
+        smithwaterman.init();
+        smithwaterman.sw();
+        smithwaterman.printMatrix();
+        smithwaterman.walkback();
     }
 
     public static class SWNode {

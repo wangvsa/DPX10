@@ -1,6 +1,10 @@
 import x10.array.Array_2;
 import x10.util.Random;
 
+
+/**
+ * Serial version of 01 Knapsack problem only using X10
+ */
 public class Knapsack {
 
     public static val CAPICITY = 40n;    // knapsack capility
