@@ -16,10 +16,10 @@ public class LCS extends TadaAppDP[Int] {
 		str1 = new String();
 		str2 = new String();
 		try {
-			val input1 = new File("LCS_STR1.txt");
+			val input1 = new File("demo/lcs/LCS_STR1.txt");
 			for(line in input1.lines())
 				str1 += line;
-			val input2 = new File("LCS_STR2.txt");
+			val input2 = new File("demo/lcs/LCS_STR2.txt");
 			for(line in input2.lines())
 				str2 += line;
 		} catch(IOException) {}
