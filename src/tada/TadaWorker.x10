@@ -115,5 +115,4 @@ public class TadaWorker[T]{T haszero} {
         //Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
     }
 
-
 }

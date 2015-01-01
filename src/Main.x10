@@ -3,6 +3,7 @@ import tada.*;
 import tada.dag.*;
 import demo.*;
 import demo.smithwaterman.*;
+import demo.nussinov.*;
 import demo.lcs.*;
 import demo.knapsack.*;
 
@@ -22,6 +23,8 @@ public class Main {
 			wordCount();
 		if(choose.equals("knap"))
 			knap(args);
+		if(choose.equals("nussinov"))
+			nussinov(args);
 	}
 
 	private static def lcs() {
@@ -61,6 +64,16 @@ public class Main {
 		val knap = new Knapsack(item_num, capacity);
 		val dag = new KnapsackDag[Int](knap);
 		val tada = new Tada[Int](knap, dag);
+		tada.start();
+	}
+
+	private static def nussinov(args:Rail[String]) {
+		var length:Int = 20n;
+		if(args.size == 2)
+			length = Int.parseInt(args(1));
+		val nus = new Nussinov(length);
+		val dag = new NussinovDag[Int](nus);
+		val tada = new Tada[Int](nus, dag);
 		tada.start();
 	}
 

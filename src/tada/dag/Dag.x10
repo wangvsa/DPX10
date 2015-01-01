@@ -45,7 +45,7 @@ public abstract class Dag[T]{T haszero} {
 		this._localReadyTasks = PlaceLocalHandle.makeFlat[ArrayList[Location]]
             (Place.places(), ()=>new ArrayList[Location](), (p:Place)=>true);
 		this._localCachedTasks = PlaceLocalHandle.makeFlat[CacheList[T]]
-            (Place.places(), ()=>new CacheList[T](10n), (p:Place)=>true);
+            (Place.places(), ()=>new CacheList[T](100n), (p:Place)=>true);
         this._resilientFlag = GlobalRef[Cell[Boolean]](new Cell[Boolean](false));
 
 		initRegionAndDist();
@@ -59,7 +59,7 @@ public abstract class Dag[T]{T haszero} {
 		if(this.height==1n)
 			this._taskDist = Dist.makeBlock(_taskRegion, 1);
 		else
-			this._taskDist = Dist.makeBlock(_taskRegion, 0);
+			this._taskDist = Dist.makeBlockBlock(_taskRegion);
 	}
 
 	public def initDistributedTasks() {

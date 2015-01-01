@@ -7,7 +7,6 @@ import tada.dag.*;
 
 public class Viterbi extends TadaAppDP[Double] {
 
-
 	// 观察空间
 	public static val OBSERVATION_NUM = 3n;
 	public static val OBSERVATIONS = ["normal", "cold", "dizzy"];
