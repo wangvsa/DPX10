@@ -40,7 +40,7 @@ public class Tada[T]{T haszero} {
 		Console.OUT.println("\nspend time:"+time+"ms\n");
 
 		//this._dag.printIndegreeMatrix();
-		this._dag.printResultMatrix();
+		//this._dag.printResultMatrix();
 		this._app.taskFinished(_dag);
 	}
 

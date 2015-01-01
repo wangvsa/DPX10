@@ -4,8 +4,14 @@ import tada.dag.*;
 
 public class KnapsackDag[T]{T haszero} extends Dag[T] {
 
-    public def this(height:Int, width:Int) {
-        super(height, width);
+    private _knapsack:Knapsack;
+
+    //public def this(height:Int, width:Int) {
+    //    super(height, width);
+    //}
+    public def this(knap:Knapsack) {
+        super(knap._item_num+1n, knap._capacity+1n);
+        this._knapsack = knap;
     }
 
     public def getDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
@@ -13,16 +19,15 @@ public class KnapsackDag[T]{T haszero} extends Dag[T] {
         if( i == 0n || j == 0n ) {
             locs = new Rail[Location](0);
         } else {
-            if( Knapsack.weight(i-1) <= j ) {
+            if( _knapsack._weight(i-1) <= j ) {
                 locs = new Rail[Location](2);
                 locs(0) = new Location(i-1n, j);
-                locs(1) = new Location(i-1n, j-Knapsack.weight(i-1));
+                locs(1) = new Location(i-1n, j-_knapsack._weight(i-1));
             } else {
                 locs = new Rail[Location](1);
                 locs(0) = new Location(i-1n, j);
             }
         }
-
         return locs;
     }
 
@@ -31,21 +36,21 @@ public class KnapsackDag[T]{T haszero} extends Dag[T] {
         val locs:Rail[Location];
         if ( i == 0n ) {
             locs = [new Location(i+1n, j)];
-        } else if( i == Knapsack.ITEM_NUM ) {
-            if( j+Knapsack.weight(i-1) > Knapsack.CAPICITY ) {
+        } else if( i == _knapsack._item_num) {
+            if( j+_knapsack._weight(i-1) > _knapsack._capacity) {
                 locs = new Rail[Location](0);
             } else {
                 locs = new Rail[Location](1);
-                locs(0) = new Location(i, j+Knapsack.weight(i-1));
+                locs(0) = new Location(i, j+_knapsack._weight(i-1));
             }
         } else {
-            if( j+Knapsack.weight(i-1) > Knapsack.CAPICITY ) {
+            if( j+_knapsack._weight(i-1) > _knapsack._capacity) {
                 locs = new Rail[Location](1);
                 locs(0) = new Location(i+1n, j);
             } else {
                 locs = new Rail[Location](2);
                 locs(0) = new Location(i+1n, j);
-                locs(1) = new Location(i, j+Knapsack.weight(i-1));
+                locs(1) = new Location(i, j+_knapsack._weight(i-1));
             }
         }
 

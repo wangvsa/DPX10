@@ -7,7 +7,7 @@ import x10.util.Random;
  */
 public class Knapsack {
 
-    public static val CAPICITY = 40n;    // knapsack capility
+    public static val CAPICITY = 40n;    // knapsack capacity
     public static val ITEM_NUM = 6n;     // number of items
 
     public static val profit = [3n, 4n, 6n, 10n, 2n, 1n];

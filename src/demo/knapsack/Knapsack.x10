@@ -8,11 +8,23 @@ import x10.util.Random;
 
 public class Knapsack extends TadaAppDP[Int] {
 
-    public static val CAPICITY = 40n;    // knapsack capility
-    public static val ITEM_NUM = 6n;     // number of items
+    public val _capacity:Int;    // knapsack capacity
+    public val _item_num:Int;    // number of items
 
-    public static val profit = [3n, 4n, 6n, 10n, 2n, 1n];
-    public static val weight = [3n, 6n, 9n, 20n, 5n, 2n];
+    public val _profit:Rail[Int];
+    public val _weight:Rail[Int];
+
+    public def this(capacity:Int, item_num:Int) {
+        this._capacity = capacity;
+        this._item_num = item_num;
+        this._profit = new Rail[Int](item_num);
+        this._weight = new Rail[Int](item_num);
+        val rand = new Random();
+        for(i in (1n..item_num) ) {
+            this._profit(i-1n) = rand.nextInt(10n)+1n;
+            this._weight(i-1n) = rand.nextInt(capacity*2n/item_num)+1n;
+        }
+    }
 
     public def compute(i:Int, j:Int, tasks:Rail[Task[Int]]):Int {
         if( i == 0n || j == 0n) {
@@ -24,14 +36,14 @@ public class Knapsack extends TadaAppDP[Int] {
                 if (loc.j==j)
                     v1 = tasks(k).getResult();
                 else
-                    v2 = tasks(k).getResult() + this.profit(i-1);
+                    v2 = tasks(k).getResult() + this._profit(i-1);
             }
             return Math.max(v1, v2);
         }
     }
 
     public def taskFinished(dag:Dag[Int]):void {
-        Console.OUT.println("\nTask finished, sum:" + dag.getNode(ITEM_NUM, CAPICITY).getResult()+"\n");
+        Console.OUT.println("\nTask finished, sum:" + dag.getNode(this._item_num, this._capacity).getResult()+"\n");
     }
 
 }

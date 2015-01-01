@@ -21,7 +21,7 @@ public class Main {
 		if(choose.equals("wc"))
 			wordCount();
 		if(choose.equals("knap"))
-			knap();
+			knap(args);
 	}
 
 	private static def lcs() {
@@ -50,9 +50,17 @@ public class Main {
 		tada.start();
 	}
 
-	private static def knap() {
-		val dag = new KnapsackDag[Int](Knapsack.ITEM_NUM+1n, Knapsack.CAPICITY+1n);
-		val tada = new Tada[Int](new Knapsack(), dag);
+	private static def knap(args:Rail[String]) {
+		var item_num:Int = 20n;
+		var capacity:Int = 1000n;
+		if(args.size == 3) {
+			item_num = Int.parseInt(args(1));
+			capacity = Int.parseInt(args(2));
+		}
+
+		val knap = new Knapsack(item_num, capacity);
+		val dag = new KnapsackDag[Int](knap);
+		val tada = new Tada[Int](knap, dag);
 		tada.start();
 	}
 

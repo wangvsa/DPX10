@@ -31,7 +31,7 @@ public class TadaWorker[T]{T haszero} {
         }
         val totalSize = _dag._distAllTasks.getLocalPortion().size;
 
-        Console.OUT.println(here+" running on "+Runtime.getName()+", finishCount:"+finishCount+", totalCount"+totalSize);
+        Console.OUT.println(here+" running on "+Runtime.getName()+", finishCount:"+finishCount+", totalCount:"+totalSize);
 
         while(true) {
 
