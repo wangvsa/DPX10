@@ -1,4 +1,4 @@
-package demo;
+package demo.viterbi;
 
 import x10.array.Array_2;
 import tada.*;
@@ -23,7 +23,6 @@ public class Viterbi extends TadaAppDP[Double] {
 	// 实际观测到的矩阵(用于测试)
 	public static val TIME_NUM = 4n;
 	public static val realObservations = ["normal", "cold", "dizzy", "dizzy"];
-
 
 	public def this() {
 		// 初始化常量
@@ -50,7 +49,7 @@ public class Viterbi extends TadaAppDP[Double] {
 		var obsIndex:Long = 0;
 		for(var k:Long=0; k<OBSERVATIONS.size; k++) {
 			if(OBSERVATIONS(k)==this.realObservations(i))
-				obsIndex = i;
+				obsIndex = k;
 		}
 
 		var res:Double = 0.0;

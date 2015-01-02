@@ -3,7 +3,7 @@ package tada.dag;
 public class DagUpper[T]{T haszero} extends Dag[T] {
 
 	public def this(height:Int, width:Int) {
-		super(height, width);	
+		super(height, width);
 	}
 
 	public def getDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
@@ -24,7 +24,6 @@ public class DagUpper[T]{T haszero} extends Dag[T] {
 	public def getAntiDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
 		var locs:Rail[Location];
 
-		// 第一行
 		if(i==this.height-1n)
 			return new Rail[Location](0);
 
@@ -34,5 +33,20 @@ public class DagUpper[T]{T haszero} extends Dag[T] {
 		}
 		return locs;
 	}
+
+	public def printIndegreeMatrix() {
+        Console.OUT.println("indegree matrix:");
+        for(var i:Int=0n;i<height;i++) {
+            for (var j:Int=0n; j<width; j++) {
+                val node = getNode(i, j);
+                if(!node._isFinish)
+                    Console.OUT.print(getNode(i, j).getIndegree());
+                else
+                    Console.OUT.print("f");
+            }
+            Console.OUT.println();
+        }
+        Console.OUT.println();
+    }
 
 }

@@ -59,7 +59,8 @@ public abstract class Dag[T]{T haszero} {
 		if(this.height==1n)
 			this._taskDist = Dist.makeBlock(_taskRegion, 1);
 		else
-			this._taskDist = Dist.makeBlockBlock(_taskRegion);
+            this._taskDist = Dist.makeBlock(_taskRegion, 1);
+			//this._taskDist = Dist.makeBlockBlock(_taskRegion);
 	}
 
 	public def initDistributedTasks() {

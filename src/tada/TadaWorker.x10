@@ -107,12 +107,15 @@ public class TadaWorker[T]{T haszero} {
         // 将依赖(i,j)的节点入度减一
         val locs = _dag.getAntiDependencyTasksLocation(i, j);
 
+
         for(loc in locs) {
             _dag.decrementIndegree(loc.i, loc.j);
         }
 
         time += System.currentTimeMillis();
         //Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
+
+        //_dag.printIndegreeMatrix();
     }
 
 }

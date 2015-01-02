@@ -6,6 +6,7 @@ import demo.smithwaterman.*;
 import demo.nussinov.*;
 import demo.lcs.*;
 import demo.knapsack.*;
+import demo.viterbi.*;
 
 
 public class Main {
@@ -19,6 +20,8 @@ public class Main {
 			sw();
 		if(choose.equals("viterbi"))
 			viterbi();
+		if(choose.equals("viterbi2"))
+			viterbi2(args);
 		if(choose.equals("wc"))
 			wordCount();
 		if(choose.equals("knap"))
@@ -44,6 +47,20 @@ public class Main {
 	private static def viterbi() {
 		val dag = new DagUpper[Double](Viterbi.TIME_NUM, Viterbi.STATUS_NUM);
 		val tada= new Tada[Double](new Viterbi(), dag);
+		tada.start();
+	}
+	private static def viterbi2(args:Rail[String]) {
+		var status_num:Int = 10n;
+		var observation_num:Int = 20n;
+		var real_observertaion_num:Int = 30n;
+		if(args.size==4) {
+			status_num = Int.parseInt(args(1));
+			observation_num = Int.parseInt(args(2));
+			real_observertaion_num = Int.parseInt(args(3));
+		}
+		val viterbi = new Viterbi2(status_num, observation_num, real_observertaion_num);
+		val dag = new DagUpper[Double](real_observertaion_num, status_num);
+		val tada= new Tada[Double](viterbi, dag);
 		tada.start();
 	}
 
