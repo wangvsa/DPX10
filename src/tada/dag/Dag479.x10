@@ -1,46 +1,36 @@
-package demo.nussinov;
+package tada.dag;
 
-import tada.*;
-import tada.dag.*;
-import tada.Tada.*;
 import x10.util.ArrayList;
 
-public class NussinovDag[T]{T haszero} extends Dag[T]{
+public class Dag479[T]{T haszero} extends Dag[T] {
 
-    private val nussinov:Nussinov;
-
-    public def this(nus:Nussinov) {
-        super(nus.length, nus.length);
-        this.nussinov = nus;
+    public def this(height:Int, width:Int) {
+        super(height, width);
     }
 
     public def getDependencies(i:Int, j:Int):Rail[VertexId] {
         if(i>=j)
             return new Rail[VertexId]();
-
-        val vids = new ArrayList[VertexId]();
-        if(i!=this.nussinov.length-1n && j!=0n)
-            vids.add(new VertexId(i+1n, j-1n));
-        for(k in (i..(j-1n))) {
-            vids.add(new VertexId(i, k));
-            vids.add(new VertexId(k+1n, j));
-        }
-        return vids.toRail();
+        val vids = new Rail[VertexId](3);
+        vids(0) = new VertexId(i, j-1n);
+        vids(1) = new VertexId(i+1n, j);
+        vids(2) = new VertexId(i+1n, j-1n);
+        return vids;
     }
 
     public def getAntiDependencies(i:Int, j:Int):Rail[VertexId] {
-        if(i > j+1n)
+        if(i>j+1n)
             return new Rail[VertexId]();
+        if(i==j+1n)
+            return [new VertexId(i-1n, j+1n)];
 
         val vids = new ArrayList[VertexId]();
-        if(i!=0n && j!=this.nussinov.length-1n)
+        if(i-1n>=0 && j+1n<width)
             vids.add(new VertexId(i-1n, j+1n));
-        for(k in (0n..(i-1n)))
-            if(j!=k)
-                vids.add(new VertexId(k, j));
-        for(k in ((j+1n)..(this.nussinov.length-1n)))
-            if(i!=k)
-                vids.add(new VertexId(i, k));
+        if(j+1n<width)
+            vids.add(new VertexId(i, j+1n));
+        if(i-1n>=0n)
+            vids.add(new VertexId(i-1n, j));
         return vids.toRail();
     }
 

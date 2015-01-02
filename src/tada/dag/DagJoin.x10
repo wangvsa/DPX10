@@ -10,33 +10,33 @@ public class DagJoin[T]{T haszero} extends Dag[T]{
         super(1n, width);
     }
 
-    public def getDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
+    public def getDependencies(i:Int, j:Int):Rail[VertexId] {
 
-        val locs:Rail[Location];
+        val vids:Rail[VertexId];
 
         if(i==0n)    // 第一层无依赖
-            locs = new Rail[Location](0);
+            vids = new Rail[VertexId](0);
         else {      // 第二层依赖第一层
-            locs = new Rail[Location](this.taskSize-1);
+            vids = new Rail[VertexId](this.taskSize-1);
             for(k in 0..(this.taskSize-1)) {
-                locs(k) = new Location(0n, k as Int);
+                vids(k) = new VertexId(0n, k as Int);
             }
         }
 
-        return locs;
+        return vids;
     }
 
-    public def getAntiDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
-        val locs:Rail[Location];
+    public def getAntiDependencies(i:Int, j:Int):Rail[VertexId] {
+        val vids:Rail[VertexId];
 
         if(i==1n)  // 第二层
-            locs = new Rail[Location](0);
+            vids = new Rail[VertexId](0);
         else {    // 第一层
-            locs = new Rail[Location](1);
-            locs(0) = new Location(1n, 0n); // 只被最后一个节点依赖
+            vids = new Rail[VertexId](1);
+            vids(0) = new VertexId(1n, 0n); // 只被最后一个节点依赖
         }
 
-        return locs;
+        return vids;
     }
 
 

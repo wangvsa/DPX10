@@ -29,23 +29,22 @@ public class SmithWaterman extends TadaAppDP[Int] {
 		Console.OUT.println("str1.length:"+str1.length()+", str2.length:"+str2.length());
 	}
 
-	public def compute(i:Int, j:Int, tasks:Rail[Task[Int]]):Int {
+	public def compute(i:Int, j:Int, vertices:Rail[Vertex[Int]]):Int {
 
 		// compute the score
         if(i==0n && j==0n) {
             return str1.charAt(i)==str2.charAt(j) ? MATCH_SCORE : DISMATCH_SCORE;
         } else if(i==0n || j==0n) {
-            return tasks(0).getResult() + GAP_PENALTY;
+            return vertices(0).getResult() + GAP_PENALTY;
         } else {
         	var lefttop:Int = 0n, left:Int = 0n, top:Int = 0n;
-        	for(k in 0..(tasks.size-1)) {
-				val loc = tasks(k)._loc;
-				if(loc.i==i-1n && loc.j==j-1n)
-					lefttop = tasks(k).getResult();
-				else if(loc.i==i-1n && loc.j==j)
-					top = tasks(k).getResult();
-				else if(loc.i==i && loc.j==j-1n)
-					left = tasks(k).getResult();
+        	for(vertex in vertices) {
+				if(vertex.i==i-1n && vertex.j==j-1n)
+					lefttop = vertex.getResult();
+				else if(vertex.i==i-1n && vertex.j==j)
+					top = vertex.getResult();
+				else if(vertex.i==i && vertex.j==j-1n)
+					left = vertex.getResult();
 			}
             val v1 = lefttop + (str1.charAt(i)==str2.charAt(j) ? MATCH_SCORE : DISMATCH_SCORE);
             val v2 = left + GAP_PENALTY;
@@ -78,9 +77,9 @@ public class SmithWaterman extends TadaAppDP[Int] {
 			else
 				Console.OUT.print("-");
 
-			val left = dag.getNode(i-1n, j).getResult();
-			val up = dag.getNode(i, j-1n).getResult();
-			val leftup = dag.getNode(i-1n, j-1n).getResult();
+			val left = dag.getVertex(i-1n, j).getResult();
+			val up = dag.getVertex(i, j-1n).getResult();
+			val leftup = dag.getVertex(i-1n, j-1n).getResult();
 			if(left >= up && left >= leftup) {
 				i = i - 1n;
 			} else if(up >= left && up >= leftup) {

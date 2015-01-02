@@ -7,6 +7,7 @@ import demo.nussinov.*;
 import demo.lcs.*;
 import demo.knapsack.*;
 import demo.viterbi.*;
+import demo.plalindrome.*;
 
 
 public class Main {
@@ -28,6 +29,8 @@ public class Main {
 			knap(args);
 		if(choose.equals("nussinov"))
 			nussinov(args);
+		if(choose.equals("plalindrome"))
+			plalindrome(args);
 	}
 
 	private static def lcs() {
@@ -91,6 +94,16 @@ public class Main {
 		val nus = new Nussinov(length);
 		val dag = new NussinovDag[Int](nus);
 		val tada = new Tada[Int](nus, dag);
+		tada.start();
+	}
+
+	private static def plalindrome(args:Rail[String]) {
+		var length:Int = 20n;
+		if(args.size == 2)
+			length = Int.parseInt(args(1));
+		val app = new Plalindrome(length);
+		val dag = new Dag479[Int](length, length);
+		val tada = new Tada[Int](app, dag);
 		tada.start();
 	}
 

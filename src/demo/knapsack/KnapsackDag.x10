@@ -14,47 +14,47 @@ public class KnapsackDag[T]{T haszero} extends Dag[T] {
         this._knapsack = knap;
     }
 
-    public def getDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
-        val locs:Rail[Location];
+    public def getDependencies(i:Int, j:Int):Rail[VertexId] {
+        val vids:Rail[VertexId];
         if( i == 0n || j == 0n ) {
-            locs = new Rail[Location](0);
+            vids = new Rail[VertexId](0);
         } else {
             if( _knapsack._weight(i-1) <= j ) {
-                locs = new Rail[Location](2);
-                locs(0) = new Location(i-1n, j);
-                locs(1) = new Location(i-1n, j-_knapsack._weight(i-1));
+                vids = new Rail[VertexId](2);
+                vids(0) = new VertexId(i-1n, j);
+                vids(1) = new VertexId(i-1n, j-_knapsack._weight(i-1));
             } else {
-                locs = new Rail[Location](1);
-                locs(0) = new Location(i-1n, j);
+                vids = new Rail[VertexId](1);
+                vids(0) = new VertexId(i-1n, j);
             }
         }
-        return locs;
+        return vids;
     }
 
 
-    public def getAntiDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
-        val locs:Rail[Location];
+    public def getAntiDependencies(i:Int, j:Int):Rail[VertexId] {
+        val vids:Rail[VertexId];
         if ( i == 0n ) {
-            locs = [new Location(i+1n, j)];
+            vids = [new VertexId(i+1n, j)];
         } else if( i == _knapsack._item_num) {
             if( j+_knapsack._weight(i-1) > _knapsack._capacity) {
-                locs = new Rail[Location](0);
+                vids = new Rail[VertexId](0);
             } else {
-                locs = new Rail[Location](1);
-                locs(0) = new Location(i, j+_knapsack._weight(i-1));
+                vids = new Rail[VertexId](1);
+                vids(0) = new VertexId(i, j+_knapsack._weight(i-1));
             }
         } else {
             if( j+_knapsack._weight(i-1) > _knapsack._capacity) {
-                locs = new Rail[Location](1);
-                locs(0) = new Location(i+1n, j);
+                vids = new Rail[VertexId](1);
+                vids(0) = new VertexId(i+1n, j);
             } else {
-                locs = new Rail[Location](2);
-                locs(0) = new Location(i+1n, j);
-                locs(1) = new Location(i, j+_knapsack._weight(i-1));
+                vids = new Rail[VertexId](2);
+                vids(0) = new VertexId(i+1n, j);
+                vids(1) = new VertexId(i, j+_knapsack._weight(i-1));
             }
         }
 
-        return locs;
+        return vids;
     }
 
     // 覆盖父类输出入度矩阵函数
@@ -64,7 +64,7 @@ public class KnapsackDag[T]{T haszero} extends Dag[T] {
             for (var j:Int=0n; j<width; j++) {
                 val node = getNode(i, j);
                 if(!node._isFinish)
-                    Console.OUT.print(getNode(i, j).getIndegree());
+                    Console.OUT.print(node.getIndegree());
                 else
                     Console.OUT.print("f");
             }
@@ -78,7 +78,7 @@ public class KnapsackDag[T]{T haszero} extends Dag[T] {
         Console.OUT.println("result matrix:");
         for(var i:Int=0n;i<height;i++) {
             for (var j:Int=0n; j<width; j++) {
-                Console.OUT.print(getNode(i, j).getResult()+" ");
+                Console.OUT.print(getVertex(i, j).getResult()+" ");
             }
             Console.OUT.println();
         }

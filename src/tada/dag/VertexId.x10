@@ -1,6 +1,9 @@
 package tada.dag;
 
-public struct Location {
+/**
+ * Used when write a custom DAG pattern and in ready task list
+ */
+public struct VertexId {
 
     public val i:Int;    // row
     public val j:Int;    // col
@@ -10,11 +13,7 @@ public struct Location {
         this.j = j;
     }
 
-    public def hash() {
-    	return (i*10000+j) as Int;
-    }
-
-    public def equalsWith(another:Location) {
+    public def equalsWith(another:VertexId) {
     	if(this.i==another.i&&this.j==another.j)
     		return true;
     	return false;

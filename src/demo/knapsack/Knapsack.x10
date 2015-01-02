@@ -26,24 +26,23 @@ public class Knapsack extends TadaAppDP[Int] {
         }
     }
 
-    public def compute(i:Int, j:Int, tasks:Rail[Task[Int]]):Int {
+    public def compute(i:Int, j:Int, vertices:Rail[Vertex[Int]]):Int {
         if( i == 0n || j == 0n) {
             return 0n;
         } else {
             var v1:Int = 0n, v2:Int = 0n;
-            for (k in 0..(tasks.size-1)) {
-                val loc = tasks(k)._loc;
-                if (loc.j==j)
-                    v1 = tasks(k).getResult();
+            for (vertex in vertices) {
+                if (vertex.j==j)
+                    v1 = vertex.getResult();
                 else
-                    v2 = tasks(k).getResult() + this._profit(i-1);
+                    v2 = vertex.getResult() + this._profit(i-1);
             }
             return Math.max(v1, v2);
         }
     }
 
     public def taskFinished(dag:Dag[Int]):void {
-        Console.OUT.println("\nTask finished, sum:" + dag.getNode(this._item_num, this._capacity).getResult()+"\n");
+        Console.OUT.println("\nTask finished, sum:" + dag.getVertex(this._item_num, this._capacity).getResult()+"\n");
     }
 
 }

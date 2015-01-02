@@ -71,7 +71,7 @@ public class Tada[T]{T haszero} {
 
 	// 由实现类实现
 	public interface TadaApp[T]{T haszero} {
-		def compute(i:Int, j:Int, Tasks:Rail[Task[T]]):T;
+		def compute(i:Int, j:Int, Tasks:Rail[Vertex[T]]):T;
 		def taskFinished(dag:Dag[T]):void;
 		def loopOver(dag:Dag[T]):Boolean;
 	}

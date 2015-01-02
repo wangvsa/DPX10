@@ -48,12 +48,12 @@ public class TadaWorker[T]{T haszero} {
 
 
     private def scheduleReadyTasks() {
-        val nullLoc = new Location(-9n, -9n);
+        val nullLoc = new VertexId(-9n, -9n);
         if(_dag._localReadyTasks().isEmpty())
             return;
 
         // 批量执行任务
-        val locList = new ArrayList[Location]();
+        val locList = new ArrayList[VertexId]();
         while(!_dag._localReadyTasks().isEmpty()) {
             //val loc = _dag.addAndGet(nullLoc);
             val loc = _dag.getReadyNode();
@@ -82,7 +82,7 @@ public class TadaWorker[T]{T haszero} {
     }
 
 
-    private def doTasks(locList:ArrayList[Location]) {
+    private def doTasks(locList:ArrayList[VertexId]) {
         try {
             for(loc in locList)
                 work(loc.i, loc.j);
@@ -96,7 +96,7 @@ public class TadaWorker[T]{T haszero} {
     private def work(i:Int, j:Int) {
         var time:Long = -System.currentTimeMillis();
 
-        val tasks = _dag.getDependencyTasks(i, j);
+        val tasks = _dag.getDependentVertices(i, j);
 
         // do the real computing.
         val result = _app.compute(i, j, tasks);
@@ -105,17 +105,14 @@ public class TadaWorker[T]{T haszero} {
         _dag.setResult(i, j, result);
 
         // 将依赖(i,j)的节点入度减一
-        val locs = _dag.getAntiDependencyTasksLocation(i, j);
+        val vids = _dag.getAntiDependencies(i, j);
 
-
-        for(loc in locs) {
-            _dag.decrementIndegree(loc.i, loc.j);
+        for(vid in vids) {
+            _dag.decrementIndegree(vid.i, vid.j);
         }
 
         time += System.currentTimeMillis();
         //Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
-
-        //_dag.printIndegreeMatrix();
     }
 
 }

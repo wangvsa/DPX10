@@ -11,7 +11,7 @@ public class WordCount extends TadaAppDP[HashMap[String,Int]] {
   public static articles:Rail[String] = ["Hello world", "hi nihao", "beatiful", "it is an apple",
                                 "good morning", "morning", "hello world", "it is an orange"];
 
-  public def compute(i:Int, j:Int, tasks:Rail[Task[HashMap[String, Int]]]):HashMap[String,Int]{
+  public def compute(i:Int, j:Int, tasks:Rail[Vertex[HashMap[String, Int]]]):HashMap[String,Int]{
     // 第一层
     if(i==0n) {
         return countForString(articles(j));
@@ -40,7 +40,7 @@ public class WordCount extends TadaAppDP[HashMap[String,Int]] {
   public def taskFinished(dag:Dag[HashMap[String, Int]]):void {
     Console.OUT.println("\nThr results:");
     // get the final result
-    val result:HashMap[String, Int] = dag.getNode(1n, 0n).getResult();
+    val result:HashMap[String, Int] = dag.getVertex(1n, 0n).getResult();
     val it = result.entries().iterator();
     while(it.hasNext()) {
       val entry = it.next();

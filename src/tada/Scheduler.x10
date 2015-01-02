@@ -21,19 +21,19 @@ public class Scheduler[T]{T haszero} {
 		return Place(index);
 	}
 
-	public def leastDepdencySchedule(loclist:ArrayList[Location]):Place {
-		// place score matrix， 
+	public def leastDepdencySchedule(loclist:ArrayList[VertexId]):Place {
+		// place score matrix，
 		val psm = new Rail[Int](Place.numPlaces(), 0n);
 
 		for(theloc in loclist) {
 			// 每一个依赖加2分
-			val depLocs = _dag.getDependencyTasksLocation(theloc.i, theloc.j);
+			val depLocs = _dag.getDependencies(theloc.i, theloc.j);
 			for(loc in depLocs) {
 				psm(_dag.getNodePlace(loc.i, loc.j).id) += 2n;
 			}
 
 			// 每被依赖一个加1分
-			val antiDepLocs = _dag.getAntiDependencyTasksLocation(theloc.i, theloc.j);
+			val antiDepLocs = _dag.getAntiDependencies(theloc.i, theloc.j);
 			for(loc in antiDepLocs) {
 				psm(_dag.getNodePlace(loc.i, loc.j).id) += 1n;
 			}
@@ -61,13 +61,13 @@ public class Scheduler[T]{T haszero} {
 	}
 
 	public def resetIdleCount() {
-		placeIdleCount(here.id) = 0n;	
+		placeIdleCount(here.id) = 0n;
 	}
 
 	public static def scheduleMaxIdle(countList:Rail[Int]) {
 		if(countList(here.id) < 100)
 			return here;
-		
+
 		var index:Long = here.id;
 		for(var i:Long=0;i<countList.size;i++) {
 			if(countList(i)<10) {

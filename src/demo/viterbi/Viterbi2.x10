@@ -82,7 +82,7 @@ public class Viterbi2 extends TadaAppDP[Double] {
 
 
 	// 在维特比算法中，i代表时间；j代表状态
-	public def compute(i:Int, j:Int, tasks:Rail[Task[Double]]):Double {
+	public def compute(i:Int, j:Int, vertices:Rail[Vertex[Double]]):Double {
 
 		// 获取当前观测状态(下标)
 		var obsIndex:Long = 0;
@@ -100,10 +100,9 @@ public class Viterbi2 extends TadaAppDP[Double] {
 		// 递归计算
 		if(i >= 1n) {
 			// 计算最大概率
-			for(var k:Int=0n; k<tasks.size; k++) {
-				val loc = tasks(k)._loc;
-				if(loc.i==i-1n) {
-					val tmp = TRANSITION_MATIRX(loc.j, j) * tasks(k).getResult() * EMISSION_MATRIX(j, obsIndex);
+			for(vertex in vertices) {
+				if(vertex.i==i-1n) {
+					val tmp = TRANSITION_MATIRX(vertex.j, j) * vertex.getResult() * EMISSION_MATRIX(j, obsIndex);
 					if(tmp > res)
 						res = tmp;
 				}

@@ -26,18 +26,17 @@ public class LCS extends TadaAppDP[Int] {
 		Console.OUT.println("str1.length:"+str1.length()+", str2.length:"+str2.length());
 	}
 
-	public def compute(i:Int, j:Int, tasks:Rail[Task[Int]]):Int {
+	public def compute(i:Int, j:Int, vertices:Rail[Vertex[Int]]):Int {
 		var v1:Int=0n, v2:Int=0n, v3:Int=0n;
-		for(task in tasks) {
-			val loc = task._loc;
-			if(loc.i==i-1n && loc.j==j-1n) {
-				v1 = task.getResult();			// up-left
+		for(vertex in vertices) {
+			if(vertex.i==i-1n && vertex.j==j-1n) {
+				v1 = vertex.getResult();			// up-left
 			}
-			else if(loc.i==i-1n && loc.j==j) {
-				v2 = task.getResult();			// up
+			else if(vertex.i==i-1n && vertex.j==j) {
+				v2 = vertex.getResult();			// up
 			}
-			else if(loc.i==i && loc.j==j-1n) {
-				v3 = task.getResult();			// left
+			else if(vertex.i==i && vertex.j==j-1n) {
+				v3 = vertex.getResult();			// left
 			}
 		}
 
@@ -66,8 +65,8 @@ public class LCS extends TadaAppDP[Int] {
 				j = j - 1n;
 			} else {
 				if(i==0n||j==0n) break;
-				val left = dag.getNode(i-1n, j).getResult();
-				val up = dag.getNode(i, j-1n).getResult();
+				val left = dag.getVertex(i-1n, j).getResult();
+				val up = dag.getVertex(i, j-1n).getResult();
 				if(left >= up)
 					i = i - 1n;
 				else

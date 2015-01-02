@@ -2,6 +2,12 @@ package tada.dag;
 
 import x10.util.concurrent.AtomicLong;
 
+/**
+ *
+ * This class only used by DPX10 to implement DAG
+ * It is invisible to users
+ * Vertex class is visible to users
+ */
 public class Node[T]{T haszero} {
 	public var _isFinish:Boolean;
 	private var _result:T;
@@ -31,6 +37,6 @@ public class Node[T]{T haszero} {
 		this._result = value;
 	}
 	public def getResult() {
-		return this._result;	
+		return this._result;
 	}
 }

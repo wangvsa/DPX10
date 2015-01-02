@@ -29,21 +29,20 @@ public class Nussinov extends TadaAppDP[Int] {
         this.seq = new String(chars);
     }
 
-    public def compute(i:Int, j:Int, tasks:Rail[Task[Int]]):Int {
+    public def compute(i:Int, j:Int, vertices:Rail[Vertex[Int]]):Int {
         if(i>=j)
             return 0n;
 
         var v1:Int = 0n, v2:Int = 0n;
         val values = new Rail[Int](j-i, 0n);
-        for (task in tasks) {
-            val loc = task._loc;
-            if(loc.i==i+1n && loc.j==j-1n)
-                v1 = task.getResult() + (isComplementary(i,j)? 1n:0n);
+        for (vertex in vertices) {
+            if(vertex.i==i+1n && vertex.j==j-1n)
+                v1 = vertex.getResult() + (isComplementary(i,j)? 1n:0n);
             else {
-                if(loc.i==i)
-                    values(loc.j-i) += task.getResult();
-                if(loc.j==j)
-                    values(loc.i-i-1) += task.getResult();
+                if(vertex.i==i)
+                    values(vertex.j-i) += vertex.getResult();
+                if(vertex.j==j)
+                    values(vertex.i-i-1) += vertex.getResult();
             }
         }
 

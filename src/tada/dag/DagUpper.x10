@@ -6,32 +6,32 @@ public class DagUpper[T]{T haszero} extends Dag[T] {
 		super(height, width);
 	}
 
-	public def getDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
+	public def getDependencies(i:Int, j:Int):Rail[VertexId] {
 
-		var locs:Rail[Location];
+		var vids:Rail[VertexId];
 
 		if(i==0n)
-			return new Rail[Location](0);
+			return new Rail[VertexId](0);
 
-		locs = new Rail[Location](this.width);
-		for(var k:Long=0; k<locs.size; k++) {
-			locs(k) = new Location(i-1n, k as Int);
+		vids = new Rail[VertexId](this.width);
+		for(var k:Long=0; k<vids.size; k++) {
+			vids(k) = new VertexId(i-1n, k as Int);
 		}
-		return locs;
+		return vids;
 	}
 
 
-	public def getAntiDependencyTasksLocation(i:Int, j:Int):Rail[Location] {
-		var locs:Rail[Location];
+	public def getAntiDependencies(i:Int, j:Int):Rail[VertexId] {
+		var vids:Rail[VertexId];
 
 		if(i==this.height-1n)
-			return new Rail[Location](0);
+			return new Rail[VertexId](0);
 
-		locs = new Rail[Location](this.width);
-		for(var k:Long=0;k<locs.size;k++) {
-			locs(k) = new Location(i+1n, k as Int);
+		vids = new Rail[VertexId](this.width);
+		for(var k:Long=0;k<vids.size;k++) {
+			vids(k) = new VertexId(i+1n, k as Int);
 		}
-		return locs;
+		return vids;
 	}
 
 	public def printIndegreeMatrix() {
@@ -40,7 +40,7 @@ public class DagUpper[T]{T haszero} extends Dag[T] {
             for (var j:Int=0n; j<width; j++) {
                 val node = getNode(i, j);
                 if(!node._isFinish)
-                    Console.OUT.print(getNode(i, j).getIndegree());
+                    Console.OUT.print(node.getIndegree());
                 else
                     Console.OUT.print("f");
             }
