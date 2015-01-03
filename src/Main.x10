@@ -8,6 +8,7 @@ import demo.lcs.*;
 import demo.knapsack.*;
 import demo.viterbi.*;
 import demo.plalindrome.*;
+import demo.manhattantourist.*;
 
 
 public class Main {
@@ -31,6 +32,8 @@ public class Main {
 			nussinov(args);
 		if(choose.equals("plalindrome"))
 			plalindrome(args);
+		if(choose.equals("manhattan"))
+			manhattan(args);
 	}
 
 	private static def lcs() {
@@ -105,6 +108,20 @@ public class Main {
 		val dag = new Dag479[Int](length, length);
 		val tada = new Tada[Int](app, dag);
 		tada.start();
+	}
+
+	private static def manhattan(args:Rail[String]) {
+		var height:Int = 20n;
+		var width:Int = 20n;
+		if(args.size == 3) {
+			height = Int.parseInt(args(1));
+			width = Int.parseInt(args(2));
+		}
+		val app = new ManhattanTourist(height, width);
+		val dag = new Dag24[Int](height, width);
+		val tada = new Tada[Int](app, dag);
+		tada.start();
+
 	}
 
 }
