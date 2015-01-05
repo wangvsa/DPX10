@@ -17,7 +17,7 @@ ALL_CHARACTORS = "abcdefghijklmnopqrstuvwxyz"
 # get output filename and string length from command line
 def getParameters():
 	if len(sys.argv) != 3:
-		print "usage: ./random_string.py filename length"
+		print("usage: ./random_string.py filename length")
 		sys.exit()
 	path = sys.argv[1]
 	length = sys.argv[2]
@@ -35,7 +35,7 @@ def generateFile():
 
 	fp = open(path, 'w')
 
-	lines = length / 100
+	lines = int( length / 100 )
 	for i in range(lines):
 		line = generateSingleLine(100)
 		fp.write(line)

@@ -9,8 +9,8 @@ public class NussinovDag[T]{T haszero} extends Dag[T]{
 
     private val nussinov:Nussinov;
 
-    public def this(nus:Nussinov) {
-        super(nus.length, nus.length);
+    public def this(nus:Nussinov, config:Configuration) {
+        super(nus.length, nus.length, config);
         this.nussinov = nus;
     }
 

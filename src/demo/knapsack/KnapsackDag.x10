@@ -1,16 +1,14 @@
 package demo.knapsack;
 
+import tada.Configuration;
 import tada.dag.*;
 
 public class KnapsackDag[T]{T haszero} extends Dag[T] {
 
     private _knapsack:Knapsack;
 
-    //public def this(height:Int, width:Int) {
-    //    super(height, width);
-    //}
-    public def this(knap:Knapsack) {
-        super(knap._item_num+1n, knap._capacity+1n);
+    public def this(knap:Knapsack, config:Configuration) {
+        super(knap._item_num+1n, knap._capacity+1n, config);
         this._knapsack = knap;
     }
 

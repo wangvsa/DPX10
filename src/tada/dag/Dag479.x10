@@ -1,11 +1,12 @@
 package tada.dag;
 
+import tada.Configuration;
 import x10.util.ArrayList;
 
 public class Dag479[T]{T haszero} extends Dag[T] {
 
-    public def this(height:Int, width:Int) {
-        super(height, width);
+    public def this(height:Int, width:Int, config:Configuration) {
+        super(height, width, config);
     }
 
     public def getDependencies(i:Int, j:Int):Rail[VertexId] {

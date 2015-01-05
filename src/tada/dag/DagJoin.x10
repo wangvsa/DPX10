@@ -1,13 +1,15 @@
 package tada.dag;
 
+import tada.Configuration;
+
 /**
  *  一个两层的Join模型，共有N个任务
  *  第一层N-1个任务且无依赖，第二层有1个任务，依赖第一层所有任务
  */
 public class DagJoin[T]{T haszero} extends Dag[T]{
 
-    public def this(width:Int) {
-        super(1n, width);
+    public def this(width:Int, config:Configuration) {
+        super(1n, width, config);
     }
 
     public def getDependencies(i:Int, j:Int):Rail[VertexId] {

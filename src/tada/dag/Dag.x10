@@ -1,12 +1,12 @@
 package tada.dag;
 
+import tada.Configuration;
 import x10.util.concurrent.AtomicInteger;
 import x10.util.*;
 import x10.regionarray.Region;
 import x10.regionarray.Dist;
 import x10.regionarray.DistArray;
 import x10.compiler.NonEscaping;
-
 
 /**
  * This class is the base class.
@@ -25,6 +25,9 @@ public abstract class Dag[T]{T haszero} {
 	public var _taskRegion : Region;
 	public var _taskDist : Dist;
 
+
+    public val _config : Configuration;
+
 	public var _resilientFlag : GlobalRef[Cell[Boolean]];
 
 
@@ -35,12 +38,11 @@ public abstract class Dag[T]{T haszero} {
   	// 获取依赖任务时，将异地的任务缓存下来，TadaWorker可以从自己的Place访问
     public val _localCachedTasks:PlaceLocalHandle[CacheList[T]];
 
-
-
-	public def this(height:Int, width:Int) {
+	public def this(height:Int, width:Int, config:Configuration) {
 		this.taskSize = height * width;
 		this.height = height;
 		this.width = width;
+        this._config = config;
 
 		this._localReadyTasks = PlaceLocalHandle.makeFlat[ArrayList[VertexId]]
             (Place.places(), ()=>new ArrayList[VertexId](), (p:Place)=>true);
@@ -56,11 +58,19 @@ public abstract class Dag[T]{T haszero} {
 	/** 可被子类覆盖 **/
 	@NonEscaping final def initRegionAndDist() {
 		this._taskRegion = Region.make(0..(height-1n), 0..(width-1n));
-		if(this.height==1n)
+		if(this.height==1n) {
 			this._taskDist = Dist.makeBlock(_taskRegion, 1);
-		else
-            //this._taskDist = Dist.makeBlock(_taskRegion, 1);
-			this._taskDist = Dist.makeBlockBlock(_taskRegion);
+		} else {
+            if(_config.distributionManner()==Configuration.DIST_BLOCK_0)
+                this._taskDist = Dist.makeBlock(_taskRegion, 1);
+            if(_config.distributionManner()==Configuration.DIST_BLOCK_1)
+                this._taskDist = Dist.makeBlock(_taskRegion, 1);
+            if(_config.distributionManner()==Configuration.DIST_BLOCK_BLOCK)
+                this._taskDist = Dist.makeBlockBlock(_taskRegion);
+        }
+
+        Console.OUT.println("init DAG, width:"+width+", height:"+height+
+            ", dist:"+_config.distributionManner()+", schedule:"+_config.scheduleStrategy());
 	}
 
 	public def initDistributedTasks() {
@@ -79,7 +89,6 @@ public abstract class Dag[T]{T haszero} {
 			}
 		});
 	}
-
 
 
 	/**
