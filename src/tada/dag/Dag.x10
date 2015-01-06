@@ -61,16 +61,17 @@ public abstract class Dag[T]{T haszero} {
 		if(this.height==1n) {
 			this._taskDist = Dist.makeBlock(_taskRegion, 1);
 		} else {
-            if(_config.distributionManner()==Configuration.DIST_BLOCK_0)
+            if(_config.distManner==Configuration.DIST_BLOCK_0)
                 this._taskDist = Dist.makeBlock(_taskRegion, 1);
-            if(_config.distributionManner()==Configuration.DIST_BLOCK_1)
+            if(_config.distManner==Configuration.DIST_BLOCK_1)
                 this._taskDist = Dist.makeBlock(_taskRegion, 1);
-            if(_config.distributionManner()==Configuration.DIST_BLOCK_BLOCK)
+            if(_config.distManner==Configuration.DIST_BLOCK_BLOCK)
                 this._taskDist = Dist.makeBlockBlock(_taskRegion);
         }
 
         Console.OUT.println("init DAG, width:"+width+", height:"+height+
-            ", dist:"+_config.distributionManner()+", schedule:"+_config.scheduleStrategy());
+            ", dist:"+_config.distManner+", schedule:"+_config.scheduleStrategy+
+            ", loop for schedule:"+_config.loopForSchedule);
 	}
 
 	public def initDistributedTasks() {

@@ -13,15 +13,27 @@ public class Configuration {
     public static val SCHEDULE_MINIMUM_COMM = "SCHEDULE_MINIMUM_COMM";
 
 
+
+    // Now we have four options can be tuned
+    public var loopForSchedule:Int=1n;
+    public var distManner:String = "DIST_BLOCK_BLOCK";
+    public var scheduleStrategy:String = "SCHEDULE_LOCAL";
+    public var isLoadBalance:Boolean = false;  // not used for now
+
+
     private val args:ArrayList[String];
 
     public def this(arg_array:Rail[String]) {
-
         this.args = new ArrayList[String]();
         for(arg in arg_array) {
             if(arg.startsWith("-"))
                 args.add(arg);
         }
+
+        this.loopForSchedule = parseLoopForSchedule();
+        this.distManner = parseDistributionManner();
+        this.scheduleStrategy = parseScheduleStrategy();
+        this.isLoadBalance = parseIsLoadBalance();
     }
 
     /**
@@ -30,7 +42,7 @@ public class Configuration {
      * -b0: Block along 0 index
      * -b1: Block along 1 index
      */
-    public def distributionManner() {
+    private def parseDistributionManner() {
         for(arg in args) {
             if(arg.equals("-b0"))
                 return DIST_BLOCK_0;
@@ -46,7 +58,7 @@ public class Configuration {
      * -sm : minimum communication schedule
      * -sr : random schedule
      */
-    public def scheduleStrategy() {
+    private def parseScheduleStrategy() {
         for(arg in args) {
             if(arg.equals("-sr"))
                 return SCHEDULE_RANDOM;
@@ -56,13 +68,29 @@ public class Configuration {
         return SCHEDULE_LOCAL;
     }
 
+    /**
+     * Loop time for on scheduling in TadaWork
+     * TODO not usefull, can not promote efficiency ?
+     * --loop=N
+     */
+    private def parseLoopForSchedule() {
+        var loop:Int = 1n;
+        for (arg in args) {
+            if(arg.startsWith("--loop") && arg.indexOf("=")!=-1n) {
+                loop = Int.parse(arg.split("=")(1));
+            }
+        }
+        return loop;
+    }
+
     // -lb: use load balance
-	public def isLoadBalance() {
+	private def parseIsLoadBalance() {
         for(arg in args) {
             if(arg.equals("-lb"))
                 return true;
         }
 		return false;
 	}
+
 
 }

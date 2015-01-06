@@ -28,9 +28,15 @@ public class TadaWorker[T]{T haszero} {
         val totalSize = _dag._distAllTasks.getLocalPortion().size;
         Console.OUT.println(here+" running on "+Runtime.getName()+", finishCount:"+finishCount+", totalCount:"+totalSize);
 
+        var loop_count:Int = _dag._config.loopForSchedule;
         while(true) {
 
-            scheduleReadyTasks();
+            // loop for one schedule
+            loop_count = loop_count - 1n;
+            if(loop_count == 0n) {
+                scheduleReadyTasks();
+                loop_count = _dag._config.loopForSchedule;
+            }
 
             Runtime.probe();
             if(finishCount==totalSize)
@@ -67,19 +73,21 @@ public class TadaWorker[T]{T haszero} {
         }
 
         if(!vidList.isEmpty()) {
-            if(_dag._config.scheduleStrategy()==Configuration.SCHEDULE_LOCAL) {
+            if(_dag._config.scheduleStrategy.equals(Configuration.SCHEDULE_LOCAL)) {
                 // 本地调度
                 async doTasks(vidList);
-            } else if(_dag._config.scheduleStrategy()==Configuration.SCHEDULE_MINIMUM_COMM) {
+            } else if(_dag._config.scheduleStrategy.equals(Configuration.SCHEDULE_MINIMUM_COMM)) {
                 // 最少依赖调度
                 val place = _scheduler.leastDepdencySchedule(vidList);
                 if(place==here)
                     async doTasks(vidList);
                 else
                     async at(place) doTasks(vidList);
-            } else if(_dag._config.scheduleStrategy()==Configuration.SCHEDULE_RANDOM) {
+            } else if(_dag._config.scheduleStrategy.equals(Configuration.SCHEDULE_RANDOM)) {
                 // 随机调度
                 async at(Scheduler.randomSchedule()) doTasks(vidList);
+            } else {
+                Console.OUT.println("schedule:"+_dag._config.scheduleStrategy);
             }
         }
     }
