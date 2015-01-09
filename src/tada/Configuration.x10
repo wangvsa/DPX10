@@ -14,9 +14,10 @@ public class Configuration {
 
 
 
-    // Now we have four options can be tuned
+    // Now we have five options can be tuned
     public var loopForSchedule:Int=1n;
-    public var distManner:String = "DIST_BLOCK_BLOCK";
+    public var cacheSize:Int = 100n;
+    public var distManner:String = "DIST_BLOCK_1";
     public var scheduleStrategy:String = "SCHEDULE_LOCAL";
     public var isLoadBalance:Boolean = false;  // not used for now
 
@@ -30,10 +31,12 @@ public class Configuration {
                 args.add(arg);
         }
 
-        this.loopForSchedule = parseLoopForSchedule();
-        this.distManner = parseDistributionManner();
-        this.scheduleStrategy = parseScheduleStrategy();
-        this.isLoadBalance = parseIsLoadBalance();
+        parseLoopForSchedule();
+        parseDistributionManner();
+        parseScheduleStrategy();
+        parseCacheSize();
+        parseIsLoadBalance();
+
     }
 
     /**
@@ -45,11 +48,12 @@ public class Configuration {
     private def parseDistributionManner() {
         for(arg in args) {
             if(arg.equals("-b0"))
-                return DIST_BLOCK_0;
+                this.distManner = DIST_BLOCK_0;
             if(arg.equals("-b1"))
-                return DIST_BLOCK_1;
+                this.distManner = DIST_BLOCK_1;
+            if(arg.equals("-bb"))
+                this.distManner = DIST_BLOCK_BLOCK;
         }
-        return DIST_BLOCK_BLOCK;
     }
 
     /**
@@ -61,11 +65,12 @@ public class Configuration {
     private def parseScheduleStrategy() {
         for(arg in args) {
             if(arg.equals("-sr"))
-                return SCHEDULE_RANDOM;
+                this.scheduleStrategy =  SCHEDULE_RANDOM;
             if(arg.equals("-sm"))
-                return SCHEDULE_MINIMUM_COMM;
+                this.scheduleStrategy = SCHEDULE_MINIMUM_COMM;
+            if(arg.equals("-sl"))
+                this.scheduleStrategy = SCHEDULE_LOCAL;
         }
-        return SCHEDULE_LOCAL;
     }
 
     /**
@@ -74,23 +79,35 @@ public class Configuration {
      * --loop=N
      */
     private def parseLoopForSchedule() {
-        var loop:Int = 1n;
         for (arg in args) {
-            if(arg.startsWith("--loop") && arg.indexOf("=")!=-1n) {
-                loop = Int.parse(arg.split("=")(1));
-            }
+            if(arg.startsWith("--loop") && arg.indexOf("=")!=-1n)
+                this.loopForSchedule = Int.parse(arg.split("=")(1));
         }
-        return loop;
+    }
+
+    /**
+     * Set cache size
+     * --cache=N
+     */
+    private def parseCacheSize() {
+        var cacheSize:Int = 100n;
+        for (arg in args) {
+            if(arg.startsWith("--cache") && arg.indexOf("=")!=-1n)
+                this.cacheSize = Int.parse(arg.split("=")(1));
+        }
     }
 
     // -lb: use load balance
 	private def parseIsLoadBalance() {
         for(arg in args) {
             if(arg.equals("-lb"))
-                return true;
+                this.isLoadBalance = true;
         }
-		return false;
 	}
 
+
+    public def printConfiguration() {
+        Console.OUT.println("dist:"+this.distManner+", schedule:"+this.scheduleStrategy+", cache:"+this.cacheSize+", loop:"+this.loopForSchedule);
+    }
 
 }

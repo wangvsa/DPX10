@@ -29,6 +29,7 @@ public class Tada[T]{T haszero} {
 					worker.execute();
 				}
 			} catch(es:MultipleExceptions) {
+				es.printStackTrace();
 				recover();
 				continue;
 			}
