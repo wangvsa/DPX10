@@ -65,11 +65,17 @@ public class TadaWorker[T]{T haszero} {
             return;
 
         // 批量执行任务
+
+        var count:Int = 0n;
         val vidList = new ArrayList[VertexId]();
         while(!_dag._localReadyTasks().isEmpty()) {
             val vid = _dag.getReadyNode();
             vidList.add(vid);
             this.finishCount++;
+            count++;
+
+            if(count==100n) // at most 100 vertices at a time
+                break;
         }
 
         if(!vidList.isEmpty()) {

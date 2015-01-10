@@ -1,12 +1,32 @@
 package tada.dag;
 
 import tada.Configuration;
-import x10.util.ArrayList;
 
 public class Dag479[T]{T haszero} extends Dag[T] {
 
     public def this(height:Int, width:Int, config:Configuration) {
         super(height, width, config);
+    }
+
+    // override
+    public def initDistributedTasks() {
+        Place.places().broadcastFlat(()=>{
+            val it = _distAllTasks.getLocalPortion().iterator();
+            while(it.hasNext()) {
+                val point:Point = it.next();
+                val i = point(0) as Int;
+                val j = point(1) as Int;
+                val loc = new VertexId(i, j);
+                val indegree = getDependencies(i, j).size;
+                this._distAllTasks(point) = new Node[T](indegree);
+                if(i>j+1n) {
+                    this._distAllTasks(point)._isFinish = true;
+                } else {
+                    if(indegree==0)
+                        _localReadyTasks().add(loc);
+                }
+            }
+        });
     }
 
     public def getDependencies(i:Int, j:Int):Rail[VertexId] {
@@ -25,14 +45,14 @@ public class Dag479[T]{T haszero} extends Dag[T] {
         if(i==j+1n)
             return [new VertexId(i-1n, j+1n)];
 
-        val vids = new ArrayList[VertexId]();
-        if(i-1n>=0 && j+1n<width)
-            vids.add(new VertexId(i-1n, j+1n));
-        if(j+1n<width)
-            vids.add(new VertexId(i, j+1n));
-        if(i-1n>=0n)
-            vids.add(new VertexId(i-1n, j));
-        return vids.toRail();
+        if(i-1n>=0n && j+1n<width)
+            return [new VertexId(i-1n, j+1n), new VertexId(i, j+1n), new VertexId(i-1n, j)];
+        else if(i-1n >= 0n)
+            return [new VertexId(i-1n, j)];
+        else if(j+1n < width)
+            return [new VertexId(i, j+1n)];
+
+        return new Rail[VertexId]();
     }
 
     public def printIndegreeMatrix() {

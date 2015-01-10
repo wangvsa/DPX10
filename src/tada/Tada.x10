@@ -62,9 +62,7 @@ public class Tada[T]{T haszero} {
 			return false;
 		}
 
-		Console.OUT.println("X10_NTHREADS:"+Runtime.NTHREADS);
-		Console.OUT.println("X10_NPLACES:"+Place.numPlaces());
-
+		Console.OUT.println("X10_NPLACES:"+Place.numPlaces()+", X10_NTHREADS:"+Runtime.NTHREADS);
 		return true;
 	}
 
