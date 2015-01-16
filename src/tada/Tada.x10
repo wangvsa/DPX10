@@ -36,7 +36,6 @@ public class Tada[T]{T haszero} {
 			break;
 		}
 
-
 		time += System.currentTimeMillis();
 		Console.OUT.println("\nspend time:"+time+"ms\n");
 
@@ -51,8 +50,8 @@ public class Tada[T]{T haszero} {
 		_dag.resilient();
 		t += System.currentTimeMillis();
 		Console.OUT.println("resilient finish, spend time:"+t+"ms");
-		this._dag.printIndegreeMatrix();
-		this._dag.printResultMatrix();
+		//this._dag.printIndegreeMatrix();
+		//this._dag.printResultMatrix();
 	}
 
 

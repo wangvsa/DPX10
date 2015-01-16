@@ -5,7 +5,8 @@ import x10.util.concurrent.AtomicInteger;
 import x10.util.*;
 import x10.regionarray.Region;
 import x10.regionarray.Dist;
-import x10.regionarray.DistArray;
+//import x10.regionarray.DistArray;
+import x10.resilient.regionarray.DistArray;
 import x10.compiler.NonEscaping;
 
 /**
@@ -207,18 +208,36 @@ public abstract class Dag[T]{T haszero} {
 	public def resilient() {
 		setResilientFlag(true);
 		remakeDistArray();
+        //testSnapShot();
 		setResilientFlag(false);
 	}
 
+    public def testSnapShot() {
+        // create snapshot
+        var time:Long = -System.currentTimeMillis();
+        this._distAllTasks.snapshot();
+        time += System.currentTimeMillis();
+        Console.OUT.println("create snapshot time:"+time+"ms");
+
+        // create a new Dist using a new PlaceGroup
+        val livePlaces = Place.places();
+        val newDist = Dist.makeBlock(_taskRegion, 1, livePlaces);
+
+        // restore
+        time = -System.currentTimeMillis();
+        _distAllTasks.restore(newDist);
+        time += System.currentTimeMillis();
+        Console.OUT.println("remake time:"+time+"ms");
+    }
+
 
     public def remakeDistArray() {
-
     	val livePlaces = Place.places();
-    	var newDist:Dist;
-    	if(this.height==1n)
-    		newDist = Dist.makeBlock(_distAllTasks.dist.region, 1n, livePlaces);
-		else
-    		newDist = Dist.makeBlock(_distAllTasks.dist.region, 0n, livePlaces);
+        var newDist:Dist = Dist.makeBlock(_taskRegion, 1, livePlaces);
+        if(_config.distManner==Configuration.DIST_BLOCK_0)
+            newDist = Dist.makeBlock(_taskRegion, 0, livePlaces);
+        if(_config.distManner==Configuration.DIST_BLOCK_BLOCK)
+            newDist = Dist.makeBlockBlock(_taskRegion, 0, 1, livePlaces);
 
     	val newArray = DistArray.make[Node[T]](newDist);
 
