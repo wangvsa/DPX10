@@ -21,10 +21,10 @@ public class SmithWaterman {
         str1 = new String();
         str2 = new String();
         try {
-            val input1 = new File("../demo/smithwaterman/SW_STR1.txt");
+            val input1 = new File("../../demo/smithwaterman/SW_STR1.txt");
             for(line in input1.lines())
                 str1 += line;
-            val input2 = new File("../demo/smithwaterman/SW_STR2.txt");
+            val input2 = new File("../../demo/smithwaterman/SW_STR2.txt");
             for(line in input2.lines())
                 str2 += line;
         } catch(IOException) {}
@@ -57,8 +57,8 @@ public class SmithWaterman {
             }
         }
 
-        printMatrix(matrix);
-        walkback(matrix);
+        //printMatrix(matrix);
+        //walkback(matrix);
     }
 
     private def walkback(matrix:Array_2[Int]) {
@@ -104,8 +104,10 @@ public class SmithWaterman {
 
 
     public static def main(args:Rail[String]) {
+        var time:Long = -System.currentTimeMillis();
         new SmithWaterman().sw();
+        time += System.currentTimeMillis();
+        Console.OUT.println("spend time:"+time+"ms");
     }
-
 
 }

@@ -57,8 +57,8 @@ public class Tada[T]{T haszero} {
 
 
 	private def validateEnvironment():Boolean {
-		if(Runtime.NTHREADS<=1) {
-			Console.OUT.println("Threads must be more than one");
+		if(Runtime.NTHREADS<=0) {
+			Console.OUT.println("Invalid threads number!");
 			return false;
 		}
 

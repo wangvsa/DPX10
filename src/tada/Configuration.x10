@@ -36,6 +36,7 @@ public class Configuration {
         parseDistributionManner();
         parseScheduleStrategy();
         parseCacheSize();
+        parseGranularity();
         parseIsLoadBalance();
     }
 
@@ -113,7 +114,7 @@ public class Configuration {
 
 
     public def printConfiguration() {
-        Console.OUT.println("dist:"+this.distManner+", schedule:"+this.scheduleStrategy+", cache:"+this.cacheSize+", loop:"+this.loopForSchedule);
+        Console.OUT.println("dist:"+this.distManner+", schedule:"+this.scheduleStrategy+", cache:"+this.cacheSize+", granularity:"+this.granularity+", loop:"+this.loopForSchedule);
     }
 
 }
