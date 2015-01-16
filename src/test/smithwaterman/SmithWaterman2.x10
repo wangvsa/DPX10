@@ -1,6 +1,5 @@
 import x10.io.File;
 import x10.io.IOException;
-import x10.array.Array_2;
 import x10.util.ArrayList;
 import x10.regionarray.Region;
 import x10.regionarray.Dist;
@@ -63,11 +62,11 @@ public class SmithWaterman2 {
             while(it.hasNext()) {
                 val point:Point = it.next();
                 var indegree:Int = 3n;
-                if(point(0)==0 && point(1)==0)
+                if(point(0)==0 && point(1)==0) {
                     indegree = 0n;
-                else if(point(0)==0 || point(1)==0)
+                    this.readyTaskList().add(point);
+                } else if(point(0)==0 || point(1)==0)
                     indegree = 1n;
-                this.readyTaskList().add(Point.make(0, 0));
                 distMatrix(point) = new SWNode(indegree);
             }
         });
@@ -76,39 +75,40 @@ public class SmithWaterman2 {
 
 
     private def sw() {
-
-        // start
         finish
         for (p in Place.places()) async at(p) {
             val allNodeCount = distMatrix.getLocalPortion().size;
             var finishCount:Long = 0;
             while(true) {
-                if(!this.readyTaskList().isEmpty()) {
-                    val points = this.readyTaskList().toRail();
-                    finishCount += points.size;
-                    this.readyTaskList().clear();
 
+                while(!this.readyTaskList().isEmpty()) {
+                    val points = new ArrayList[Point]();
+                    points.add(getReadyNode());
+                    finishCount++;
                     async work(points);
                 }
 
-                // local task finished
+                Runtime.probe();
+
                 if (finishCount == allNodeCount)
                     break;
             }
         }
     }
 
-    private def work(points:Rail[Point]) {
+    private def work(points:ArrayList[Point]) {
         for(val point in points) {
             compute(point);
         }
     }
 
     private def compute(point:Point) {
+
         val node:SWNode = distMatrix(point);
         node.isFinish = true;
         val i = point(0);
         val j = point(1);
+        //Console.OUT.println("work "+i+","+j+" "+here);
 
         // compute the score
         if(i==0 && j==0) {
@@ -123,6 +123,7 @@ public class SmithWaterman2 {
             val v3:Int = getScore(i, j-1) + GAP_PENALTY;
             node.score = Math.max(v1, Math.max(v2, v3));
         }
+        //Console.OUT.println("1 work "+i+","+j);
 
         // decrement the indegree of dependent nodes
         if (i==M-1 && j==N-1) {
@@ -136,20 +137,34 @@ public class SmithWaterman2 {
             decrementIndegree(i+1, j);
             decrementIndegree(i+1, j+1);
         }
+
+        //Console.OUT.println("2 work "+i+","+j);
     }
 
     private def getScore(i:Long, j:Long) {
         val p = dist(i, j);
         if(p!=here)
-            return at(dist(i,j)) distMatrix(i,j).score;
+            return at(p) distMatrix(i,j).score;
         return distMatrix(i, j).score;
     }
     private def decrementIndegree(i:Long, j:Long) {
+        //Console.OUT.println("decrement "+i+","+j);
         val p = dist(i, j);
-        if(p!=here)
-            at(dist(i, j)) distMatrix(i, j).indegree.decrementAndGet();
-        else
-            distMatrix(i, j).indegree.decrementAndGet();
+        if(p!=here) at(p) {
+            val indegree = distMatrix(i, j).indegree.decrementAndGet();
+            if(indegree==0n)
+                addReadyNode(Point.make(i, j));
+        } else {
+            val indegree = distMatrix(i, j).indegree.decrementAndGet();
+            if(indegree==0n)
+                addReadyNode(Point.make(i, j));
+        }
+    }
+    private atomic def addReadyNode(point:Point) {
+        this.readyTaskList().add(point);
+    }
+    public atomic def getReadyNode():Point {
+        return this.readyTaskList().removeFirst();
     }
 
 

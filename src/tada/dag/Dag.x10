@@ -5,8 +5,8 @@ import x10.util.concurrent.AtomicInteger;
 import x10.util.*;
 import x10.regionarray.Region;
 import x10.regionarray.Dist;
-//import x10.regionarray.DistArray;
-import x10.resilient.regionarray.DistArray;
+import x10.regionarray.DistArray;
+//import x10.resilient.regionarray.DistArray;
 import x10.compiler.NonEscaping;
 
 /**
@@ -212,6 +212,7 @@ public abstract class Dag[T]{T haszero} {
 		setResilientFlag(false);
 	}
 
+    /*
     public def testSnapShot() {
         // create snapshot
         var time:Long = -System.currentTimeMillis();
@@ -229,6 +230,7 @@ public abstract class Dag[T]{T haszero} {
         time += System.currentTimeMillis();
         Console.OUT.println("remake time:"+time+"ms");
     }
+    */
 
 
     public def remakeDistArray() {
