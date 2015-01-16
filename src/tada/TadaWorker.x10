@@ -74,7 +74,7 @@ public class TadaWorker[T]{T haszero} {
             this.finishCount++;
             count++;
 
-            if(count==100n) // at most 100 vertices at a time
+            if(count==_dag._config.granularity)
                 break;
         }
 

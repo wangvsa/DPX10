@@ -17,6 +17,7 @@ public class Configuration {
     // Now we have five options can be tuned
     public var loopForSchedule:Int=1n;
     public var cacheSize:Int = 100n;
+    public var granularity:Int = 100n;
     public var distManner:String = "DIST_BLOCK_1";
     public var scheduleStrategy:String = "SCHEDULE_LOCAL";
     public var isLoadBalance:Boolean = false;  // not used for now
@@ -36,7 +37,6 @@ public class Configuration {
         parseScheduleStrategy();
         parseCacheSize();
         parseIsLoadBalance();
-
     }
 
     /**
@@ -90,10 +90,16 @@ public class Configuration {
      * --cache=N
      */
     private def parseCacheSize() {
-        var cacheSize:Int = 100n;
         for (arg in args) {
             if(arg.startsWith("--cache") && arg.indexOf("=")!=-1n)
                 this.cacheSize = Int.parse(arg.split("=")(1));
+        }
+    }
+
+    private def parseGranularity() {
+        for (arg in args) {
+            if(arg.startsWith("--granularity") && arg.indexOf("=")!=-1n)
+                this.granularity = Int.parse(arg.split("=")(1));
         }
     }
 
