@@ -210,7 +210,6 @@ public class SmithWaterman2 {
         }
     }
 
-
     public static def main(args:Rail[String]) {
         val smithwaterman = new SmithWaterman2();
         smithwaterman.init();

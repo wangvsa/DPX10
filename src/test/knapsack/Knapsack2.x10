@@ -18,7 +18,7 @@ public class Knapsack2 {
 
     private val dist:Dist;
     private val distMatrix:DistArray[KnapNode];
-    private val readyTaskList:PlaceLocalHandle[ArrayList[Point]];
+    private val readyTaskList:PlaceLocalHandle[ArrayList[KnapNodeId]];
 
     public def this(capacity:Int, item_num:Int) {
         this._capacity = capacity;
@@ -34,8 +34,8 @@ public class Knapsack2 {
         val region = Region.make(0..this._item_num, 0..this._capacity);
         this.dist = Dist.makeBlock(region, 1);
         this.distMatrix = DistArray.make[KnapNode](this.dist);
-        this.readyTaskList = PlaceLocalHandle.makeFlat[ArrayList[Point]]
-            (Place.places(), ()=>new ArrayList[Point](), (p:Place)=>true);
+        this.readyTaskList = PlaceLocalHandle.makeFlat[ArrayList[KnapNodeId]]
+            (Place.places(), ()=>new ArrayList[KnapNodeId](), (p:Place)=>true);
 
         Console.OUT.println("item_num:"+item_num+", capacity:"+capacity);
         Console.OUT.println("X10_NPLACES:"+Place.numPlaces()+", X10_NTHREADS:"+Runtime.NTHREADS);
@@ -50,7 +50,7 @@ public class Knapsack2 {
                 var indegree:Int;
                 if( i == 0 || j == 0 ) {
                     indegree = 0n;
-                    this.readyTaskList().add(point);
+                    this.readyTaskList().add(new KnapNodeId(i as Int, j as Int));
                 } else {
                     if( this._weight(i-1) <= j )
                         indegree = 2n;
@@ -71,10 +71,10 @@ public class Knapsack2 {
             while(true) {
 
                 while(!this.readyTaskList().isEmpty()) {
-                    val points = new ArrayList[Point]();
-                    points.add(getReadyNode());
+                    val knids = new ArrayList[KnapNodeId]();
+                    knids.add(getReadyNode());
                     finishCount++;
-                    async work(points);
+                    async work(knids);
                 }
 
                 Runtime.probe();
@@ -86,22 +86,20 @@ public class Knapsack2 {
     }
 
 
-     private def work(points:ArrayList[Point]) {
-        for(val point in points) {
-            compute(point);
+     private def work(knids:ArrayList[KnapNodeId]) {
+        for(val knid in knids) {
+            compute(knid);
         }
     }
 
-    private def compute(point:Point) {
-
-        val node:KnapNode = distMatrix(point);
+    private def compute(knid:KnapNodeId) {
+        val i = knid.i;
+        val j = knid.j;
+        val node:KnapNode = distMatrix(i, j);
         node.isFinish = true;
-        val i = point(0);
-        val j = point(1);
-        //Console.OUT.println("work "+i+","+j+" "+here);
 
         // compute the score
-        if( i == 0 || j == 0 ) {
+        if( i == 0n || j == 0n ) {
             node.score = 0n;
         } else {
             if( this._weight(i-1) <= j ) {
@@ -109,56 +107,56 @@ public class Knapsack2 {
                 val v2 = getScore(i-1n, j-this._weight(i-1)) + this._profit(i-1);
                 node.score = Math.max(v1, v2);
             } else {
-                node.score = getScore(i-1, j);
+                node.score = getScore(i-1n, j);
             }
         }
 
         // decrement the indegree of dependent nodes
-        if ( i == 0 ) {
-            decrementIndegree(i+1, j);
-        } else if( i  == (this._item_num as Long) ) {
+        if ( i == 0n ) {
+            decrementIndegree(i+1n, j);
+        } else if( i  == this._item_num ) {
             if( j+this._weight(i-1) <= this._capacity)
                 decrementIndegree(i, j+this._weight(i-1));
         } else {
             if( j+this._weight(i-1) > this._capacity ) {
-                decrementIndegree(i+1, j);
+                decrementIndegree(i+1n, j);
             } else {
-                decrementIndegree(i+1, j);
+                decrementIndegree(i+1n, j);
                 decrementIndegree(i, j+this._weight(i-1));
             }
         }
     }
 
-    private def getScore(i:Long, j:Long) {
+    private def getScore(i:Int, j:Int) {
         val p = dist(i, j);
         if(p!=here)
             return at(p) distMatrix(i,j).score;
         return distMatrix(i, j).score;
     }
-    private def decrementIndegree(i:Long, j:Long) {
+    private def decrementIndegree(i:Int, j:Int) {
         //Console.OUT.println("decrement "+i+","+j);
         val p = dist(i, j);
         if(p!=here) at(p) {
             val indegree = distMatrix(i, j).indegree.decrementAndGet();
             if(indegree==0n)
-                addReadyNode(Point.make(i, j));
+                addReadyNode(new KnapNodeId(i, j));
         } else {
             val indegree = distMatrix(i, j).indegree.decrementAndGet();
             if(indegree==0n)
-                addReadyNode(Point.make(i, j));
+                addReadyNode(new KnapNodeId(i, j));
         }
     }
-    private atomic def addReadyNode(point:Point) {
+    private atomic def addReadyNode(point:KnapNodeId) {
         this.readyTaskList().add(point);
     }
-    public atomic def getReadyNode():Point {
+    public atomic def getReadyNode():KnapNodeId {
         return this.readyTaskList().removeFirst();
     }
 
 
     private def printMatrix(dist:Dist, distMatrix:DistArray[Int]) {
-        for(var i:Long=0;i<this._item_num;i++) {
-            for (var j:Long=0; j<this._capacity; j++) {
+        for(var i:Int=0n;i<this._item_num;i++) {
+            for (var j:Int=0n; j<this._capacity; j++) {
                 Console.OUT.print(getScore(i, j)+" ");
             }
             Console.OUT.println();
@@ -181,7 +179,6 @@ public class Knapsack2 {
         Console.OUT.println("spend time:"+time+"ms");
     }
 
-
     public static class KnapNode {
         public var indegree:AtomicInteger;
         public var score:Int;
@@ -191,6 +188,15 @@ public class Knapsack2 {
             this.score = 0n;
             this.indegree = new AtomicInteger(indegree);
             this.isFinish = false;
+        }
+    }
+
+    public static struct KnapNodeId {
+        public val i:Int;
+        public val j:Int;
+        public def this(i:Int, j:Int) {
+            this.i = i;
+            this.j = j;
         }
     }
 
