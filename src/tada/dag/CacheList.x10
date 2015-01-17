@@ -22,6 +22,9 @@ public class CacheList[T]{T haszero} {
     }
 
     public def add(task:Vertex[T]) {
+        if(size<=0n)
+            return;
+
         list(index) = task;
         index++;
         if(index == size)
