@@ -54,7 +54,7 @@ public class SmithWaterman2 {
 
     // Init distributed score matrix with zero
     private def init() {
-        this.readyTaskList = PlaceLocalHandle.makeFlat[ArrayList[]]
+        this.readyTaskList = PlaceLocalHandle.makeFlat[ArrayList[SWNodeId]]
             (Place.places(), ()=>new ArrayList[SWNodeId](), (p:Place)=>true);
 
         Place.places().broadcastFlat(()=>{
@@ -64,7 +64,7 @@ public class SmithWaterman2 {
                 var indegree:Int = 3n;
                 if(point(0)==0 && point(1)==0) {
                     indegree = 0n;
-                    this.readyTaskList().add(point);
+                    this.readyTaskList().add(new SWNodeId(point(0) as Int, point(1) as Int));
                 } else if(point(0)==0 || point(1)==0)
                     indegree = 1n;
                 distMatrix(point) = new SWNode(indegree);
@@ -105,62 +105,58 @@ public class SmithWaterman2 {
     private def compute(nid:SWNodeId) {
         val node:SWNode = distMatrix(nid.i, nid.j);
         node.isFinish = true;
-        val i = nid.i
+        val i = nid.i;
         val j = nid.j;
         //Console.OUT.println("work "+i+","+j+" "+here);
 
         // compute the score
-        if(i==0 && j==0) {
-            node.score = str1.charAt(i as Int)==str2.charAt(j as Int) ? MATCH_SCORE : DISMATCH_SCORE;
-        } else if(i==0) {
-            node.score = getScore(i, j-1) + GAP_PENALTY;
-        } else if(j==0) {
-            node.score = getScore(i-1, j) + GAP_PENALTY;
+        if(i==0n && j==0n) {
+            node.score = str1.charAt(i)==str2.charAt(j) ? MATCH_SCORE : DISMATCH_SCORE;
+        } else if(i==0n) {
+            node.score = getScore(i, j-1n) + GAP_PENALTY;
+        } else if(j==0n) {
+            node.score = getScore(i-1n, j) + GAP_PENALTY;
         } else {
-            var v1:Int = getScore(i-1, j-1) + ( str1.charAt(i as Int)==str2.charAt(j as Int) ? MATCH_SCORE : DISMATCH_SCORE );
-            val v2:Int = getScore(i-1, j) + GAP_PENALTY;
-            val v3:Int = getScore(i, j-1) + GAP_PENALTY;
+            var v1:Int = getScore(i-1n, j-1n) + ( str1.charAt(i)==str2.charAt(j) ? MATCH_SCORE : DISMATCH_SCORE );
+            val v2:Int = getScore(i-1n, j) + GAP_PENALTY;
+            val v3:Int = getScore(i, j-1n) + GAP_PENALTY;
             node.score = Math.max(v1, Math.max(v2, v3));
         }
-        //Console.OUT.println("1 work "+i+","+j);
 
         // decrement the indegree of dependent nodes
-        if (i==M-1 && j==N-1) {
+        if (i==M-1n && j==N-1n) {
             // do noting
-        } else if (i==M-1) {
-            decrementIndegree(i, j+1);
-        } else if (j==N-1) {
-            decrementIndegree(i+1, j);
+        } else if (i==M-1n) {
+            decrementIndegree(i, j+1n);
+        } else if (j==N-1n) {
+            decrementIndegree(i+1n, j);
         } else  {
-            decrementIndegree(i, j+1);
-            decrementIndegree(i+1, j);
-            decrementIndegree(i+1, j+1);
+            decrementIndegree(i, j+1n);
+            decrementIndegree(i+1n, j);
+            decrementIndegree(i+1n, j+1n);
         }
-
-        //Console.OUT.println("2 work "+i+","+j);
     }
 
-    private def getScore(i:Long, j:Long) {
+    private def getScore(i:Int, j:Int) {
         val p = dist(i, j);
         if(p!=here)
             return at(p) distMatrix(i,j).score;
         return distMatrix(i, j).score;
     }
-    private def decrementIndegree(i:Long, j:Long) {
-        //Console.OUT.println("decrement "+i+","+j);
+    private def decrementIndegree(i:Int, j:Int) {
         val p = dist(i, j);
         if(p!=here) at(p) {
             val indegree = distMatrix(i, j).indegree.decrementAndGet();
             if(indegree==0n)
-                addReadyNode(SWNodeId.make(i, j));
+                addReadyNode(new SWNodeId(i, j));
         } else {
             val indegree = distMatrix(i, j).indegree.decrementAndGet();
             if(indegree==0n)
-                addReadyNode(SWNodeId.make(i, j));
+                addReadyNode(new SWNodeId(i, j));
         }
     }
-    private atomic def addReadyNode(point:SWNodeId) {
-        this.readyTaskList().add(point);
+    private atomic def addReadyNode(nid:SWNodeId) {
+        this.readyTaskList().add(nid);
     }
     public atomic def getReadyNode():SWNodeId {
         return this.readyTaskList().removeFirst();
@@ -239,7 +235,7 @@ public class SmithWaterman2 {
         }
     }
 
-    public struct SWNodeId {
+    public static struct SWNodeId {
         public val i:Int;    // row
         public val j:Int;    // col
         public def this(i:Int, j:Int) {
