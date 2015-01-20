@@ -70,7 +70,7 @@ public abstract class Dag[T]{T haszero} {
                 this._taskDist = Dist.makeBlockBlock(_taskRegion);
         }
 
-        Console.OUT.println("init DAG, width:"+width+", height:"+height);
+        Console.OUT.println("init DAG, height:"+height+", width:"+width);
         this._config.printConfiguration();
 	}
 
