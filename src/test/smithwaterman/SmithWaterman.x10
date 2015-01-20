@@ -1,6 +1,7 @@
 import x10.io.File;
 import x10.io.IOException;
 import x10.array.Array_2;
+import x10.util.Random;
 
 /**
  * This is used for comparision with Tada
@@ -17,18 +18,9 @@ public class SmithWaterman {
     static val GAP_PENALTY = -1n;       // use linear gap penalty
 
     // read the same string from Tada's demo
-    public def this() {
-        str1 = new String();
-        str2 = new String();
-        try {
-            val input1 = new File("../../demo/smithwaterman/SW_STR1.txt");
-            for(line in input1.lines())
-                str1 += line;
-            val input2 = new File("../../demo/smithwaterman/SW_STR2.txt");
-            for(line in input2.lines())
-                str2 += line;
-        } catch(IOException) {}
-        Console.OUT.println("str1.length:"+str1.length()+", str2.length:"+str2.length());
+    public def this(str1_length:Int, str2_length:Int) {
+        str1 = generateRandomString(str1_length);
+        str2 = generateRandomString(str2_length);
     }
 
     private def sw() {
@@ -104,10 +96,33 @@ public class SmithWaterman {
 
 
     public static def main(args:Rail[String]) {
+        var len1:Int = 20n;
+        var len2:Int = 20n;
+        if(args.size==2) {
+            len1 = Int.parseInt(args(1));
+            len2 = Int.parseInt(args(1));
+        }
         var time:Long = -System.currentTimeMillis();
-        new SmithWaterman().sw();
+        new SmithWaterman(len1, len2).sw();
         time += System.currentTimeMillis();
         Console.OUT.println("spend time:"+time+"ms");
+    }
+
+
+
+    /**
+     * Generate a string with given length
+     */
+    private def generateRandomString(length:Int) {
+        val all_chars = ['A', 'C', 'T', 'G', 'U'];
+
+        val rand = new Random();
+        val str_chars = new Rail[Char](length);
+        for(var i:Int=0n;i<length;i++) {
+            str_chars(i) = all_chars(rand.nextLong(all_chars.size));
+        }
+
+        return new String(str_chars);
     }
 
 }

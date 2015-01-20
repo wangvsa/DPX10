@@ -5,6 +5,7 @@ import x10.regionarray.Region;
 import x10.regionarray.Dist;
 import x10.regionarray.DistArray;
 import x10.util.concurrent.AtomicInteger;
+import x10.util.Random;
 
 
 /**
@@ -30,21 +31,12 @@ public class SmithWaterman2 {
 
 
     // read the same string from Tada's demo
-    public def this() {
-        str1 = new String();
-        str2 = new String();
-        try {
-            val input1 = new File("../../demo/smithwaterman/SW_STR1.txt");
-            for(line in input1.lines())
-                str1 += line;
-            val input2 = new File("../../demo/smithwaterman/SW_STR2.txt");
-            for(line in input2.lines())
-                str2 += line;
-        } catch(IOException) {}
+    public def this(str1_length:Int, str2_length:Int) {
+        this.M = str1_length;
+        this.N = str2_length;
+        this.str1 = generateRandomString(this.M);
+        this.str2 = generateRandomString(this.N);
 
-        this.M = str1.length();
-        this.N = str2.length();
-        Console.OUT.println("str1.length:"+this.M+", str2.length:"+this.N);
         Console.OUT.println("X10_NPLACES:"+Place.numPlaces()+", X10_NTHREADS:"+Runtime.NTHREADS);
 
         val region = Region.make(0..(this.M-1n), 0..(this.N-1n));
@@ -211,7 +203,14 @@ public class SmithWaterman2 {
     }
 
     public static def main(args:Rail[String]) {
-        val smithwaterman = new SmithWaterman2();
+        var len1:Int = 20n;
+        var len2:Int = 20n;
+        if(args.size==2) {
+            len1 = Int.parseInt(args(0));
+            len2 = Int.parseInt(args(1));
+        }
+
+        val smithwaterman = new SmithWaterman2(len1, len2);
         smithwaterman.init();
         var time:Long = -System.currentTimeMillis();
         smithwaterman.sw();
@@ -241,6 +240,22 @@ public class SmithWaterman2 {
             this.i = i;
             this.j = j;
         }
+    }
+
+
+    /**
+     * Generate a string with given length
+     */
+    private def generateRandomString(length:Int) {
+        val all_chars = ['A', 'C', 'T', 'G', 'U'];
+
+        val rand = new Random();
+        val str_chars = new Rail[Char](length);
+        for(var i:Int=0n;i<length;i++) {
+            str_chars(i) = all_chars(rand.nextLong(all_chars.size));
+        }
+
+        return new String(str_chars);
     }
 
 }

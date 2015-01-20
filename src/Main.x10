@@ -54,9 +54,15 @@ public class Main {
 		tada.start();
 	}
 
-	private static def sw(config:Configuration) {
-		val sw = new SmithWaterman();
-		val dag = new Dag124[Int](sw.str1.length(), sw.str2.length(), config);
+	private static def sw(args:Rail[String], config:Configuration) {
+		var str1_length:Int = 10n;
+		var str2_length:Int = 10n;
+		if(args.size==3) {
+			str1_length = Int.parseInt(args(1));
+			str2_length = Int.parseInt(args(2));
+		}
+		val sw = new SmithWaterman(str1_length, str2_length);
+		val dag = new Dag124[Int](str1_length, str2_length, config);
 		val tada = new Tada[Int](sw, dag);
 		tada.start();
 	}

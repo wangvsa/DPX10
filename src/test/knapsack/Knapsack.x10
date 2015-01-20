@@ -3,7 +3,7 @@ import x10.util.Random;
 
 
 /**
- * Serial version of 01 Knapsack problem only using X10
+ * Serial version of 01 Knapsack problem with native X10
  */
 public class Knapsack {
 

@@ -5,6 +5,7 @@ import x10.io.IOException;
 import tada.*;
 import tada.dag.*;
 import tada.Tada.*;
+import tada.util.Util;
 
 public class SmithWaterman extends TadaAppDP[Int] {
 
@@ -15,18 +16,9 @@ public class SmithWaterman extends TadaAppDP[Int] {
 	static val DISMATCH_SCORE = -1n;
 	static val GAP_PENALTY = -1n;		// use linear gap penalty
 
-	public def this() {
-		str1 = new String();
-		str2 = new String();
-		try {
-			val input1 = new File("demo/smithwaterman/SW_STR1.txt");
-			for(line in input1.lines())
-				str1 += line;
-			val input2 = new File("demo/smithwaterman/SW_STR2.txt");
-			for(line in input2.lines())
-				str2 += line;
-		} catch(IOException) {}
-		Console.OUT.println("str1.length:"+str1.length()+", str2.length:"+str2.length());
+	public def this(str1_length, str2_length) {
+		this.str1 = Util.generateRandomString(str1_length);
+		this.str2 = Util.generateRandomString(str2_length);
 	}
 
 	public def compute(i:Int, j:Int, vertices:Rail[Vertex[Int]]):Int {
