@@ -2,7 +2,7 @@ package tada.dag;
 
 import tada.Configuration;
 
-public class Dag479[T]{T haszero} extends Dag[T] {
+public class Dag478[T]{T haszero} extends Dag[T] {
 
     public def this(height:Int, width:Int, config:Configuration) {
         super(height, width, config);

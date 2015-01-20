@@ -7,7 +7,7 @@ import demo.nussinov.*;
 import demo.lcs.*;
 import demo.knapsack.*;
 import demo.viterbi.*;
-import demo.plalindrome.*;
+import demo.palindrome.*;
 import demo.manhattantourist.*;
 
 
@@ -32,8 +32,8 @@ public class Main {
 			knap(removeConfig(args), config);
 		if(choose.equals("nussinov"))
 			nussinov(removeConfig(args), config);
-		if(choose.equals("plalindrome"))
-			plalindrome(removeConfig(args), config);
+		if(choose.equals("lps"))
+			lps(removeConfig(args), config);
 		if(choose.equals("manhattan"))
 			manhattan(removeConfig(args), config);
 	}
@@ -111,12 +111,12 @@ public class Main {
 		tada.start();
 	}
 
-	private static def plalindrome(args:Rail[String], config:Configuration) {
+	private static def lps(args:Rail[String], config:Configuration) {
 		var length:Int = 20n;
 		if(args.size == 2)
 			length = Int.parseInt(args(1));
-		val app = new Plalindrome(length);
-		val dag = new Dag479[Int](length, length, config);
+		val app = new Palindrome(length);
+		val dag = new Dag478[Int](length, length, config);
 		val tada = new Tada[Int](app, dag);
 		tada.start();
 	}
