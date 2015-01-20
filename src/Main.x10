@@ -21,7 +21,7 @@ public class Main {
 		if(choose.equals("lcs"))
 			lcs(config);
 		if(choose.equals("sw"))
-			sw(config);
+			sw(args, config);
 		if(choose.equals("viterbi"))
 			viterbi(config);
 		if(choose.equals("viterbi2"))

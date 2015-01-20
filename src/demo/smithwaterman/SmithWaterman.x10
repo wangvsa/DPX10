@@ -16,7 +16,7 @@ public class SmithWaterman extends TadaAppDP[Int] {
 	static val DISMATCH_SCORE = -1n;
 	static val GAP_PENALTY = -1n;		// use linear gap penalty
 
-	public def this(str1_length, str2_length) {
+	public def this(str1_length:Int, str2_length:Int) {
 		this.str1 = Util.generateRandomString(str1_length);
 		this.str2 = Util.generateRandomString(str2_length);
 	}
