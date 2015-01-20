@@ -3,7 +3,7 @@ package demo.palindrome;
 import tada.*;
 import tada.Tada.*;
 import tada.dag.*;
-import x10.util.Random;
+import tada.util.Util;
 
 
 /**
@@ -14,14 +14,7 @@ public class Palindrome extends TadaAppDP[Int] {
     private val seq:String;
 
     public def this(length:Int) {
-        val ALL_CHAR = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-        val rand = new Random();
-        val chars = new Rail[Char](length);
-        for(var i:Int=0n;i<length;i++) {
-            chars(i) = ALL_CHAR(rand.nextLong(ALL_CHAR.size));
-        }
-        this.seq = new String(chars);
-
+        this.seq = Util.generateRandomString(length);
         Console.OUT.println("string:"+this.seq);
     }
 

@@ -2,10 +2,10 @@
 
 
 # when running
-#x10c++ -O -NO_CHECKS *.x10 demo/*.x10 demo/*/*.x10 tada/*.x10 tada/dag/*.x10
+#x10c++ -O -NO_CHECKS *.x10 demo/*.x10 demo/*/*.x10 tada/*.x10 tada/dag/*.x10 tada/util/*.x10
 
 # when developing
-x10c++ *.x10 demo/*.x10 demo/*/*.x10 tada/*.x10 tada/dag/*.x10 -VERBOSE_CHECKS
+x10c++ *.x10 demo/*.x10 demo/*/*.x10 tada/*.x10 tada/dag/*.x10 tada/util/*.x10 -VERBOSE_CHECKS
 
 rm *.cc *.h demo/*.h demo/*.cc demo/*/*.h demo/*/*.cc tada/*.cc tada/*.h tada/*/*.h tada/*/*.cc
 
