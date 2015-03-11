@@ -1,14 +1,14 @@
-package tada;
+package dpx10;
 
 import x10.util.Team;
-import tada.dag.*;
+import dpx10.dag.*;
 
-public class Tada[T]{T haszero} {
+public class DPX10[T]{T haszero} {
 
-	public val _app:TadaApp[T];
+	public val _app:DPX10App[T];
 	public val _dag:Dag[T];
 
-	public def this(app:TadaApp[T], dag:Dag[T]) {
+	public def this(app:DPX10App[T], dag:Dag[T]) {
 		this._app = app;
 		this._dag = dag;
 		this._dag.initDistributedTasks();
@@ -25,7 +25,7 @@ public class Tada[T]{T haszero} {
 		while(true) {
 			try {
 				finish for(p in Place.places()) async at(p) {
-					val worker = new TadaWorker[T](_app, _dag);
+					val worker = new DPX10Worker[T](_app, _dag);
 					worker.execute();
 				}
 			} catch(es:MultipleExceptions) {
@@ -41,12 +41,12 @@ public class Tada[T]{T haszero} {
 
 		//this._dag.printIndegreeMatrix();
 		//this._dag.printResultMatrix();
-		this._app.taskFinished(_dag);
+		//this._app.taskFinished(_dag);
 	}
 
 	private def recover() {
 		var t:Long = -System.currentTimeMillis();
-		Console.OUT.println("captured by Tada, enter resilient mode.");
+		Console.OUT.println("captured by DPX10, enter resilient mode.");
 		_dag.resilient();
 		t += System.currentTimeMillis();
 		Console.OUT.println("resilient finish, spend time:"+t+"ms");
@@ -68,14 +68,14 @@ public class Tada[T]{T haszero} {
 
 
 	// 由实现类实现
-	public interface TadaApp[T]{T haszero} {
+	public interface DPX10App[T]{T haszero} {
 		def compute(i:Int, j:Int, Tasks:Rail[Vertex[T]]):T;
 		def taskFinished(dag:Dag[T]):void;
 		def loopOver(dag:Dag[T]):Boolean;
 	}
 
 
-	public static abstract class TadaAppDP[T]{T haszero} implements TadaApp[T] {
+	public static abstract class DPX10AppDP[T]{T haszero} implements DPX10App[T] {
 		public def loopOver(dag:Dag[T]):Boolean {
 			return true;		// task is over
 		}

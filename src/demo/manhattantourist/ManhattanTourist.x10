@@ -1,8 +1,8 @@
 package demo.manhattantourist;
 
-import tada.*;
-import tada.Tada.*;
-import tada.dag.*;
+import dpx10.*;
+import dpx10.DPX10.*;
+import dpx10.dag.*;
 import x10.util.Random;
 import x10.regionarray.Region;
 import x10.regionarray.Dist;
@@ -14,7 +14,7 @@ import x10.regionarray.DistArray;
  * Use Dag24
  *
  */
-public class ManhattanTourist extends TadaAppDP[Int] {
+public class ManhattanTourist extends DPX10AppDP[Int] {
 
     // use two 2d DistArray to represent the Manhattan distances
     // better to distribute them as the DAG vertices

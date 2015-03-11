@@ -1,6 +1,6 @@
-package tada.dag;
+package dpx10.dag;
 
-import tada.Configuration;
+import dpx10.Configuration;
 import x10.util.concurrent.AtomicInteger;
 import x10.util.*;
 import x10.regionarray.Region;
@@ -32,11 +32,11 @@ public abstract class Dag[T]{T haszero} {
 	public var _resilientFlag : GlobalRef[Cell[Boolean]];
 
 
-	// 所有任务，TadaWorker可以从任意Place访问
+	// 所有任务，DPX10Worker可以从任意Place访问
     public var _distAllTasks:DistArray[Node[T]];
-  	// 所有的就绪任务(入度为零)，TadaWorker可以从自己的Place访问自己的就绪任务列表
+  	// 所有的就绪任务(入度为零)，DPX10Worker可以从自己的Place访问自己的就绪任务列表
   	public var _localReadyTasks:PlaceLocalHandle[ArrayList[VertexId]];
-  	// 获取依赖任务时，将异地的任务缓存下来，TadaWorker可以从自己的Place访问
+  	// 获取依赖任务时，将异地的任务缓存下来，DPX10Worker可以从自己的Place访问
     public val _localCachedTasks:PlaceLocalHandle[CacheList[T]];
 
 	public def this(height:Int, width:Int, config:Configuration) {

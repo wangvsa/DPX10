@@ -1,7 +1,7 @@
 package demo.knapsack;
 
-import tada.Configuration;
-import tada.dag.*;
+import dpx10.Configuration;
+import dpx10.dag.*;
 
 public class KnapsackDag[T]{T haszero} extends Dag[T] {
 

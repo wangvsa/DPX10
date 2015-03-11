@@ -9,7 +9,7 @@ import x10.util.Random;
 
 
 /**
- * This is used for comparision with Tada
+ * This is used for comparision with DPX10
  * This is the distributed version of SmithWaterman algorithm wirtten by X10 only
  */
 public class SmithWaterman2 {
@@ -19,7 +19,7 @@ public class SmithWaterman2 {
     public var M:Int;
     public var N:Int;
 
-    // same parameters with Tada's demo
+    // same parameters with DPX10's demo
     static val MATCH_SCORE = 2n;
     static val DISMATCH_SCORE = -1n;
     static val GAP_PENALTY = -1n;       // use linear gap penalty
@@ -30,7 +30,6 @@ public class SmithWaterman2 {
     private var readyTaskList:PlaceLocalHandle[ArrayList[SWNodeId]];
 
 
-    // read the same string from Tada's demo
     public def this(str1_length:Int, str2_length:Int) {
         this.M = str1_length;
         this.N = str2_length;

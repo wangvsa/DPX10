@@ -1,4 +1,4 @@
-package tada;
+package dpx10;
 
 import x10.util.ArrayList;
 
@@ -75,7 +75,7 @@ public class Configuration {
     }
 
     /**
-     * Loop time for on scheduling in TadaWork
+     * Loop time for on scheduling in DPX10Work
      * TODO not usefull, can not promote efficiency ?
      * --loop=N
      */

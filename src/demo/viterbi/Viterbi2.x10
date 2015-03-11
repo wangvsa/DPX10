@@ -1,14 +1,14 @@
 package demo.viterbi;
 
-import tada.*;
-import tada.Tada.*;
-import tada.dag.*;
+import dpx10.*;
+import dpx10.DPX10.*;
+import dpx10.dag.*;
 import x10.util.Random;
 import x10.regionarray.Region;
 import x10.regionarray.Dist;
 import x10.regionarray.DistArray;
 
-public class Viterbi2 extends TadaAppDP[Double] {
+public class Viterbi2 extends DPX10AppDP[Double] {
 
 	// 观察空间
 	public val observation_num:Int;

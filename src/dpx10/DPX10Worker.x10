@@ -1,27 +1,27 @@
-package tada;
+package dpx10;
 
 import x10.util.*;
 import x10.regionarray.*;
-import tada.dag.*;
-import tada.Configuration;
-import tada.Tada.TadaApp;
+import dpx10.dag.*;
+import dpx10.Configuration;
+import dpx10.DPX10.DPX10App;
 
-public class TadaWorker[T]{T haszero} {
+public class DPX10Worker[T]{T haszero} {
 
-    public val _app:TadaApp[T];
+    public val _app:DPX10App[T];
     public val _dag:Dag[T];
     private transient val _scheduler:Scheduler[T];
 
     public var finishCount:Long = 0;
 
-    public def this(app:TadaApp[T], dag:Dag[T]) {
+    public def this(app:DPX10App[T], dag:Dag[T]) {
         this._app = app;
         this._dag = dag;
         this._scheduler = new Scheduler[T](_dag);
     }
 
 
-    // 开始调度本地的任务，由Tada在各个Place调用
+    // 开始调度本地的任务，由DPX10在各个Place调用
     public def execute() {
 
         checkFinishCount();
@@ -130,7 +130,7 @@ public class TadaWorker[T]{T haszero} {
         }
 
         time += System.currentTimeMillis();
-        Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
+        //Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
     }
 
 }

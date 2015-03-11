@@ -2,12 +2,12 @@ package demo.smithwaterman;
 
 import x10.io.File;
 import x10.io.IOException;
-import tada.*;
-import tada.dag.*;
-import tada.Tada.*;
-import tada.util.Util;
+import dpx10.*;
+import dpx10.dag.*;
+import dpx10.DPX10.*;
+import dpx10.util.Util;
 
-public class SmithWaterman extends TadaAppDP[Int] {
+public class SmithWaterman extends DPX10AppDP[Int] {
 
 	public var str1:String;
 	public var str2:String;

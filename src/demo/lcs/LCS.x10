@@ -2,12 +2,12 @@ package demo;
 
 import x10.io.File;
 import x10.io.IOException;
-import tada.*;
-import tada.Tada.*;
-import tada.dag.*;
+import dpx10.*;
+import dpx10.DPX10.*;
+import dpx10.dag.*;
 
 
-public class LCS extends TadaAppDP[Int] {
+public class LCS extends DPX10AppDP[Int] {
 
 	public var str1:String;
 	public var str2:String;

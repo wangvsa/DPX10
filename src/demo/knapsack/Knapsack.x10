@@ -1,12 +1,12 @@
 package demo.knapsack;
 
-import tada.*;
-import tada.dag.*;
-import tada.Tada.*;
+import dpx10.*;
+import dpx10.dag.*;
+import dpx10.DPX10.*;
 import x10.array.Array_2;
 import x10.util.Random;
 
-public class Knapsack extends TadaAppDP[Int] {
+public class Knapsack extends DPX10AppDP[Int] {
 
     public val _capacity:Int;    // knapsack capacity
     public val _item_num:Int;    // number of items

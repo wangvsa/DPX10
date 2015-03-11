@@ -1,11 +1,11 @@
 package demo;
 
 import x10.util.*;
-import tada.*;
-import tada.dag.*;
-import tada.Tada.*;
+import dpx10.*;
+import dpx10.dag.*;
+import dpx10.DPX10.*;
 
-public class WordCount extends TadaAppDP[HashMap[String,Int]] {
+public class WordCount extends DPX10AppDP[HashMap[String,Int]] {
 
   // 假设有8段话
   public static articles:Rail[String] = ["Hello world", "hi nihao", "beatiful", "it is an apple",

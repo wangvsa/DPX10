@@ -1,6 +1,6 @@
-package tada.dag;
+package dpx10.dag;
 
-import tada.Configuration;
+import dpx10.Configuration;
 
 public class Dag478[T]{T haszero} extends Dag[T] {
 

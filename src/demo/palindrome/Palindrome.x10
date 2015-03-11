@@ -1,15 +1,15 @@
 package demo.palindrome;
 
-import tada.*;
-import tada.Tada.*;
-import tada.dag.*;
-import tada.util.Util;
+import dpx10.*;
+import dpx10.DPX10.*;
+import dpx10.dag.*;
+import dpx10.util.Util;
 
 
 /**
  * Longest Palindrome Substring
  */
-public class Palindrome extends TadaAppDP[Int] {
+public class Palindrome extends DPX10AppDP[Int] {
 
     private val seq:String;
 

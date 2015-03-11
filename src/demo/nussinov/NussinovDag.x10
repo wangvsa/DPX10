@@ -1,8 +1,8 @@
 package demo.nussinov;
 
-import tada.*;
-import tada.dag.*;
-import tada.Tada.*;
+import dpx10.*;
+import dpx10.dag.*;
+import dpx10.DPX10.*;
 import x10.util.ArrayList;
 
 public class NussinovDag[T]{T haszero} extends Dag[T]{

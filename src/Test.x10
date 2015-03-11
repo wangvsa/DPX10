@@ -2,8 +2,8 @@ import x10.util.*;
 import x10.regionarray.Region;
 import x10.regionarray.Dist;
 import x10.regionarray.DistArray;
-import tada.*;
-import tada.dag.*;
+import dpx10.*;
+import dpx10.dag.*;
 
 public class Test {
 

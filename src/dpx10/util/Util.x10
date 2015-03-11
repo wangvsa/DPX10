@@ -1,4 +1,4 @@
-package tada.util;
+package dpx10.util;
 
 import x10.util.Random;
 

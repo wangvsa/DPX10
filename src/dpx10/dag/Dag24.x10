@@ -1,27 +1,34 @@
-package tada.dag;
+package dpx10.dag;
 
-import tada.Configuration;
 
-public class Dag14[T]{T haszero} extends Dag[T] {
+import dpx10.Configuration;
+
+public class Dag24[T]{T haszero} extends Dag[T] {
 
     public def this(height:Int, width:Int, config:Configuration) {
         super(height, width, config);
     }
 
     public def getDependencies(i:Int, j:Int):Rail[VertexId] {
-        if(j==0n)
+        if(i==0n && j==0n)
             return new Rail[VertexId]();
-        if(i==0n)
+        else if(i==0n)
             return [new VertexId(i, j-1n)];
-        return [new VertexId(i, j-1n), new VertexId(i-1n, j-1n)];
+        else if(j==0n)
+            return [new VertexId(i-1n, j)];
+        else
+            return [new VertexId(i-1n, j), new VertexId(i, j-1n)];
     }
 
     public def getAntiDependencies(i:Int, j:Int):Rail[VertexId] {
-        if(j==width-1n)
+        if(i==height-1n && j==width-1n)
             return new Rail[VertexId]();
-        if(i==height-1n)
-            return [ new VertexId(i, j+1n) ];
-        return [new VertexId(i, j+1n), new VertexId(i+1n, j+1n)];
+        else if(i==height-1n)
+            return [new VertexId(i, j+1n)];
+        else if(j==width-1n)
+            return [new VertexId(i+1n, j)];
+        else
+            return [new VertexId(i+1n, j), new VertexId(i, j+1n)];
     }
 
     public def printIndegreeMatrix() {

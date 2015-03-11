@@ -1,8 +1,8 @@
 package demo.nussinov;
 
-import tada.*;
-import tada.Tada.*;
-import tada.dag.*;
+import dpx10.*;
+import dpx10.DPX10.*;
+import dpx10.dag.*;
 import x10.util.Random;
 
 
@@ -12,7 +12,7 @@ import x10.util.Random;
  *
  */
 
-public class Nussinov extends TadaAppDP[Int] {
+public class Nussinov extends DPX10AppDP[Int] {
 
     public val length:Int;
     private val seq:String;

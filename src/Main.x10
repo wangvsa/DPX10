@@ -1,6 +1,6 @@
 import x10.util.*;
-import tada.*;
-import tada.dag.*;
+import dpx10.*;
+import dpx10.dag.*;
 import demo.*;
 import demo.smithwaterman.*;
 import demo.nussinov.*;
@@ -16,26 +16,27 @@ public class Main {
 	public static def main(args:Rail[String]) {
 
 		val config = new Configuration(args);
+		val appArgs = removeConfig(args);
 
 		val choose = args(0);
 		if(choose.equals("lcs"))
 			lcs(config);
 		if(choose.equals("sw"))
-			sw(args, config);
+			sw(appArgs, config);
 		if(choose.equals("viterbi"))
 			viterbi(config);
 		if(choose.equals("viterbi2"))
-			viterbi2(removeConfig(args), config);
+			viterbi2(appArgs, config);
 		if(choose.equals("wc"))
 			wordCount(config);
 		if(choose.equals("knap"))
-			knap(removeConfig(args), config);
+			knap(appArgs, config);
 		if(choose.equals("nussinov"))
-			nussinov(removeConfig(args), config);
+			nussinov(appArgs, config);
 		if(choose.equals("lps"))
-			lps(removeConfig(args), config);
+			lps(appArgs, config);
 		if(choose.equals("manhattan"))
-			manhattan(removeConfig(args), config);
+			manhattan(appArgs, config);
 	}
 
 	private static def removeConfig(all_args:Rail[String]) {
@@ -50,7 +51,7 @@ public class Main {
 	private static def lcs(config:Configuration) {
 		val lcs = new LCS();
 		val dag = new Dag124[Int](lcs.str1.length(), lcs.str2.length(), config);
-		val tada = new Tada[Int](lcs, dag);
+		val tada = new DPX10[Int](lcs, dag);
 		tada.start();
 	}
 
@@ -63,13 +64,13 @@ public class Main {
 		}
 		val sw = new SmithWaterman(str1_length, str2_length);
 		val dag = new Dag124[Int](str1_length, str2_length, config);
-		val tada = new Tada[Int](sw, dag);
+		val tada = new DPX10[Int](sw, dag);
 		tada.start();
 	}
 
 	private static def viterbi(config:Configuration) {
 		val dag = new DagUpper[Double](Viterbi.TIME_NUM, Viterbi.STATUS_NUM, config);
-		val tada= new Tada[Double](new Viterbi(), dag);
+		val tada= new DPX10[Double](new Viterbi(), dag);
 		tada.start();
 	}
 	private static def viterbi2(args:Rail[String], config:Configuration) {
@@ -83,13 +84,13 @@ public class Main {
 		}
 		val viterbi = new Viterbi2(status_num, observation_num, real_observertaion_num);
 		val dag = new DagUpper[Double](real_observertaion_num, status_num, config);
-		val tada= new Tada[Double](viterbi, dag);
+		val tada= new DPX10[Double](viterbi, dag);
 		tada.start();
 	}
 
 	private static def wordCount(config:Configuration) {
 		val dag = new DagJoin[HashMap[String, Int]](WordCount.articles.size as Int, config);
-		val tada = new Tada[HashMap[String, Int]](new WordCount(), dag);
+		val tada = new DPX10[HashMap[String, Int]](new WordCount(), dag);
 		tada.start();
 	}
 
@@ -103,7 +104,7 @@ public class Main {
 
 		val knap = new Knapsack(item_num, capacity);
 		val dag = new KnapsackDag[Int](knap, config);
-		val tada = new Tada[Int](knap, dag);
+		val tada = new DPX10[Int](knap, dag);
 		tada.start();
 	}
 
@@ -113,7 +114,7 @@ public class Main {
 			length = Int.parseInt(args(1));
 		val nus = new Nussinov(length);
 		val dag = new NussinovDag[Int](nus, config);
-		val tada = new Tada[Int](nus, dag);
+		val tada = new DPX10[Int](nus, dag);
 		tada.start();
 	}
 
@@ -123,7 +124,7 @@ public class Main {
 			length = Int.parseInt(args(1));
 		val app = new Palindrome(length);
 		val dag = new Dag478[Int](length, length, config);
-		val tada = new Tada[Int](app, dag);
+		val tada = new DPX10[Int](app, dag);
 		tada.start();
 	}
 
@@ -136,7 +137,7 @@ public class Main {
 		}
 		val app = new ManhattanTourist(height, width);
 		val dag = new Dag24[Int](height, width, config);
-		val tada = new Tada[Int](app, dag);
+		val tada = new DPX10[Int](app, dag);
 		tada.start();
 
 	}

@@ -4,7 +4,7 @@ import x10.array.Array_2;
 import x10.util.Random;
 
 /**
- * This is used for comparision with Tada
+ * This is used for comparision with DPX10
  * This is the serial version of SmithWaterman algorithm written by X10 only
  */
 public class SmithWaterman {
@@ -12,12 +12,12 @@ public class SmithWaterman {
     public var str1:String;
     public var str2:String;
 
-    // same parameters with Tada's demo
+    // same parameters with DPX10's demo
     static val MATCH_SCORE = 2n;
     static val DISMATCH_SCORE = -1n;
     static val GAP_PENALTY = -1n;       // use linear gap penalty
 
-    // read the same string from Tada's demo
+    // read the same string from DPX10's demo
     public def this(str1_length:Int, str2_length:Int) {
         str1 = generateRandomString(str1_length);
         str2 = generateRandomString(str2_length);

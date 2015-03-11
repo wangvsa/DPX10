@@ -1,11 +1,11 @@
 package demo.viterbi;
 
 import x10.array.Array_2;
-import tada.*;
-import tada.Tada.*;
-import tada.dag.*;
+import dpx10.*;
+import dpx10.DPX10.*;
+import dpx10.dag.*;
 
-public class Viterbi extends TadaAppDP[Double] {
+public class Viterbi extends DPX10AppDP[Double] {
 
 	// 观察空间
 	public static val OBSERVATION_NUM = 3n;

@@ -1,6 +1,6 @@
-package tada.dag;
+package dpx10.dag;
 
-import tada.Configuration;
+import dpx10.Configuration;
 
 /**
  *  一个两层的Join模型，共有N个任务

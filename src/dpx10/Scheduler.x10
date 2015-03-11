@@ -1,8 +1,8 @@
-package tada;
+package dpx10;
 
 import x10.util.Random;
 import x10.util.*;
-import tada.dag.*;
+import dpx10.dag.*;
 
 public class Scheduler[T]{T haszero} {
 
