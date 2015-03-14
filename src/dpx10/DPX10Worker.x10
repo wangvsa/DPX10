@@ -47,15 +47,18 @@ public class DPX10Worker[T]{T haszero} {
             Runtime.probe();
             if(finishCount==totalSize)
                 break;
-            if(_dag._resilientFlag.getLocalOrCopy()())
-                break;
+
+            // kind of slow
+            //if(_dag._resilientFlag.getLocalOrCopy()())
+            //    break;
         }
 
+        /*
         Console.OUT.println(here+" getDependency time:"+this.getDepVerticesTime+
             "ms, debugTime1:"+_dag.debugTime1+", debugTime2:"+_dag.debugTime2+
             ", debugTime3:"+_dag.debugTime3+", debugTime4:"+_dag.debugTime4+
             ", debugTime5:"+_dag.debugTime5);
-
+        */
     }
 
     /**
@@ -136,11 +139,11 @@ public class DPX10Worker[T]{T haszero} {
 
     private def work(i:Int, j:Int) {
         //Console.OUT.println("work "+i+","+j+", "+here);
-        var time:Long = System.currentTimeMillis();
+        //var time:Long = System.currentTimeMillis();
 
         val vertices = _dag.getDependentVertices(i, j);
 
-        this.getDepVerticesTime += (System.currentTimeMillis() - time);
+        //this.getDepVerticesTime += (System.currentTimeMillis() - time);
 
         // do the real computing.
         val result = _app.compute(i, j, vertices);

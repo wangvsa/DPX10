@@ -90,7 +90,7 @@ public abstract class Dag[T]{T haszero} {
 				val j = point(1) as Int;
 				val loc = new VertexId(i, j);
 				val indegree = getDependencies(i, j).size;
-				this._distAllTasks(point) = new Node[T](indegree);
+				this._distAllTasks(i, j) = new Node[T](indegree);
 				if(indegree==0) {
 					_localReadyTasks().add(loc);
 				}
@@ -104,10 +104,7 @@ public abstract class Dag[T]{T haszero} {
      * use the cache
      */
 	public def getVertex(i:Int, j:Int):Vertex[T] {
-        val t = System.currentTimeMillis();
 		val place = getNodePlace(i, j);
-        this.debugTime3 += (System.currentTimeMillis() - t);
-
         val vertex:Vertex[T];
         if(place==here) {
             vertex = new Vertex[T](i, j, _distAllTasks(i, j));
@@ -120,6 +117,7 @@ public abstract class Dag[T]{T haszero} {
                 this._localCachedTasks().add(vertex);  // cache it
             }
         }
+
         return vertex;
 	}
 
@@ -177,17 +175,17 @@ public abstract class Dag[T]{T haszero} {
      *	先查找本地缓存，如果没有从全局列表中查找然后加入缓存列表
      */
     public def getDependentVertices(i:Int, j:Int):Rail[Vertex[T]] {
+        //var t:Long = System.currentTimeMillis();
         val vids = getDependencies(i, j);
+        //this.debugTime1 += (System.currentTimeMillis() - t);
 
+        //t = System.currentTimeMillis();
         val tasks = new Rail[Vertex[T]](vids.size);
         for(var k:Long=0;k<vids.size;k++) {
-            val loc = vids(k);
-            val place = getNodePlace(loc.i, loc.j);
-
-            val t = System.currentTimeMillis();
-            tasks(k) = getVertex(loc.i, loc.j);
-            this.debugTime2 += (System.currentTimeMillis() - t);
+            tasks(k) = getVertex(vids(k).i, vids(k).j);
         }
+        //this.debugTime2 += (System.currentTimeMillis() - t);
+
         return tasks;
     }
 
@@ -218,7 +216,6 @@ public abstract class Dag[T]{T haszero} {
     }
 
 
-    // TODO no use!
     public def setResilientFlag(flag:Boolean) {
     	at(Place(0)) _resilientFlag()() = flag;
     }
@@ -266,12 +263,14 @@ public abstract class Dag[T]{T haszero} {
 			val it = newArray.getLocalPortion().iterator();
 			while(it.hasNext()) {
 				val point = it.next();
-				val indegree = getDependencies(point(0) as Int, point(1) as Int).size;
-				newArray(point) = new Node[T](indegree);
+                val i:Int = point(0) as Int;
+                val j:Int = point(1) as Int;
+				val indegree = getDependencies(i, j).size;
+				newArray(i, j) = new Node[T](indegree);
 				// 复制原来结果
-				if(_distAllTasks.dist(point)==here) {
-					newArray(point).setResult(_distAllTasks(point).getResult());
-					newArray(point)._isFinish = _distAllTasks(point)._isFinish;
+				if(_distAllTasks.dist(i, j)==here) {
+					newArray(i, j).setResult(_distAllTasks(i, j).getResult());
+					newArray(i, j)._isFinish = _distAllTasks(i, j)._isFinish;
 				}
 			}
     	});
@@ -288,11 +287,10 @@ public abstract class Dag[T]{T haszero} {
 				if(node._isFinish) {
 					val vids = getAntiDependencies(point(0) as Int, point(1) as Int);
 			        for(vid in vids) {
-			        	val p = Point.make(vid.i, vid.j);
-			        	at(newArray.dist(p)) {
-			        		val indegree = newArray(p).decrementIndegree();
-			        		if(indegree==0 && !newArray(p)._isFinish) {
-			        			newReadyTasks().add(new VertexId(p(0) as Int, p(1) as Int));
+			        	at(newArray.dist(vid.i, vid.j)) {
+			        		val indegree = newArray(vid.i, vid.j).decrementIndegree();
+			        		if(indegree==0 && !newArray(vid.i, vid.j)._isFinish) {
+			        			newReadyTasks().add(new VertexId(vid.i, vid.j));
 			        		}
 			        	}
 			        }
