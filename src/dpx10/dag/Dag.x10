@@ -110,12 +110,12 @@ public abstract class Dag[T]{T haszero} {
 
         val vertex:Vertex[T];
         if(place==here) {
-            vertex = new Vertex[T](i, j, _distAllTasks(Point.make(i, j)));
+            vertex = new Vertex[T](i, j, _distAllTasks(i, j));
         } else {
             if(this._localCachedTasks().containsKey(i, j)) {
                 vertex = this._localCachedTasks().get(i, j);
             } else {
-                val node = at(place) this._distAllTasks(Point.make(i, j));
+                val node = at(place) this._distAllTasks(i, j);
                 vertex = new Vertex[T](i, j, node);
                 this._localCachedTasks().add(vertex);  // cache it
             }
@@ -129,13 +129,13 @@ public abstract class Dag[T]{T haszero} {
     public def getNode(i:Int, j:Int):Node[T] {
         val place = getNodePlace(i, j);
         if(place==here)
-            return this._distAllTasks(Point.make(i, j));
+            return this._distAllTasks(i, j);
         else
-            return at (place) this._distAllTasks(Point.make(i, j));
+            return at (place) this._distAllTasks(i, j);
     }
 
 	public def getNodePlace(i:Int, j:Int) {
-		return this._taskDist(Point.make(i, j));
+        return this._taskDist(i, j);
 	}
 
 
@@ -145,11 +145,11 @@ public abstract class Dag[T]{T haszero} {
 	public def setResult(i:Int, j:Int, value:T) {
         val place = getNodePlace(i, j);
 		if(place==here) {
-			val node = _distAllTasks(Point.make(i, j));
+			val node = _distAllTasks(i, j);
 			node.setResult(value);
 			node._isFinish = true;
 		} else at (place) {
-			val node = _distAllTasks(Point.make(i, j));
+			val node = _distAllTasks(i, j);
 			node.setResult(value);
 			node._isFinish = true;
 		}
@@ -159,12 +159,12 @@ public abstract class Dag[T]{T haszero} {
         val loc = new VertexId(i, j);
         val place = getNodePlace(i, j);
         if(place==here) {
-        	val node = _distAllTasks(Point.make(i, j));
+        	val node = _distAllTasks(i, j);
         	val indegree = node.decrementIndegree();
 	        if(indegree==0 && !node._isFinish)
 	           	addReadyNode(loc);
         } else at(place) {
-        	val node = _distAllTasks(Point.make(i, j));
+        	val node = _distAllTasks(i, j);
             val indegree = node.decrementIndegree();
             if(indegree==0 && !node._isFinish)
             	addReadyNode(loc);
