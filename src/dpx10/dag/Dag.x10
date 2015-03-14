@@ -32,6 +32,13 @@ public abstract class Dag[T]{T haszero} {
 	public var _resilientFlag : GlobalRef[Cell[Boolean]];
 
 
+    public var debugTime1 : Long = 0;
+    public var debugTime2 : Long = 0;
+    public var debugTime3 : Long = 0;
+    public var debugTime4 : Long = 0;
+    public var debugTime5 : Long = 0;
+
+
 	// 所有任务，DPX10Worker可以从任意Place访问
     public var _distAllTasks:DistArray[Node[T]];
   	// 所有的就绪任务(入度为零)，DPX10Worker可以从自己的Place访问自己的就绪任务列表
@@ -92,15 +99,28 @@ public abstract class Dag[T]{T haszero} {
 	}
 
 
-	/**
-	 *  Used by user in taskFinished method to get result.
-	 */
+    /**
+     * Get the vertex(i, j) from local or remote place
+     * use the cache
+     */
 	public def getVertex(i:Int, j:Int):Vertex[T] {
+        val t = System.currentTimeMillis();
 		val place = getNodePlace(i, j);
-		if(place==here)
-			return new Vertex[T](i, j, this._distAllTasks(Point.make(i, j)));
-		else
-			return at (place) new Vertex[T](i, j, _distAllTasks(Point.make(i, j)));
+        this.debugTime3 += (System.currentTimeMillis() - t);
+
+        val vertex:Vertex[T];
+        if(place==here) {
+            vertex = new Vertex[T](i, j, _distAllTasks(Point.make(i, j)));
+        } else {
+            if(this._localCachedTasks().containsKey(i, j)) {
+                vertex = this._localCachedTasks().get(i, j);
+            } else {
+                val node = at(place) this._distAllTasks(Point.make(i, j));
+                vertex = new Vertex[T](i, j, node);
+                this._localCachedTasks().add(vertex);  // cache it
+            }
+        }
+        return vertex;
 	}
 
     /**
@@ -158,23 +178,15 @@ public abstract class Dag[T]{T haszero} {
      */
     public def getDependentVertices(i:Int, j:Int):Rail[Vertex[T]] {
         val vids = getDependencies(i, j);
+
         val tasks = new Rail[Vertex[T]](vids.size);
         for(var k:Long=0;k<vids.size;k++) {
             val loc = vids(k);
             val place = getNodePlace(loc.i, loc.j);
-            // TODO simplify this
-            if(place==here) {
-                val node = this._distAllTasks(Point.make(loc.i, loc.j));
-                tasks(k) = new Vertex[T](loc.i, loc.j, node);
-            } else {
-                //if(this._localCachedTasks().containsKey(loc.i, loc.j)) {
-                //    tasks(k) = this._localCachedTasks().get(loc.i, loc.j);
-                //} else {
-                    val node = at(place) this._distAllTasks(Point.make(loc.i, loc.j));
-                    tasks(k) = new Vertex[T](loc.i, loc.j, node);
-                //    this._localCachedTasks().add(tasks(k));  // cache it
-                //}
-            }
+
+            val t = System.currentTimeMillis();
+            tasks(k) = getVertex(loc.i, loc.j);
+            this.debugTime2 += (System.currentTimeMillis() - t);
         }
         return tasks;
     }

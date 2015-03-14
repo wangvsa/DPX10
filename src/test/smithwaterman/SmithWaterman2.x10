@@ -73,9 +73,13 @@ public class SmithWaterman2 {
             while(true) {
 
                 while(!this.readyTaskList().isEmpty()) {
-                    val nids = new ArrayList[SWNodeId]();
-                    nids.add(getReadyNode());
-                    finishCount++;
+                    //val nids = new ArrayList[SWNodeId]();
+                    //nids.add(getReadyNode());
+                    //finishCount++;
+
+                    val nids = getAllReadyNodes();
+                    finishCount += nids.size();
+
                     async work(nids);
                 }
 
@@ -151,6 +155,11 @@ public class SmithWaterman2 {
     }
     public atomic def getReadyNode():SWNodeId {
         return this.readyTaskList().removeFirst();
+    }
+    public atomic def getAllReadyNodes() {
+        val nids = this.readyTaskList().clone();
+        this.readyTaskList().clear();
+        return nids;
     }
 
 
