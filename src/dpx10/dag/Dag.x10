@@ -167,13 +167,13 @@ public abstract class Dag[T]{T haszero} {
                 val node = this._distAllTasks(Point.make(loc.i, loc.j));
                 tasks(k) = new Vertex[T](loc.i, loc.j, node);
             } else {
-                if(this._localCachedTasks().containsKey(loc.i, loc.j)) {
-                    tasks(k) = this._localCachedTasks().get(loc.i, loc.j);
-                } else {
+                //if(this._localCachedTasks().containsKey(loc.i, loc.j)) {
+                //    tasks(k) = this._localCachedTasks().get(loc.i, loc.j);
+                //} else {
                     val node = at(place) this._distAllTasks(Point.make(loc.i, loc.j));
                     tasks(k) = new Vertex[T](loc.i, loc.j, node);
-                    this._localCachedTasks().add(tasks(k));  // cache it
-                }
+                //    this._localCachedTasks().add(tasks(k));  // cache it
+                //}
             }
         }
         return tasks;
@@ -195,8 +195,14 @@ public abstract class Dag[T]{T haszero} {
     public atomic def addReadyNode(vid:VertexId) {
 		this._localReadyTasks().add(vid);
     }
+    // not used
     public atomic def getReadyNode():VertexId {
 		return this._localReadyTasks().removeFirst();
+    }
+    public atomic def getAllReadyNodes() {
+        val nodes = this._localReadyTasks().clone();
+        this._localReadyTasks().clear();
+        return nodes;
     }
 
 

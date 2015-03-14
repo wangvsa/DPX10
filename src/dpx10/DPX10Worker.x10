@@ -12,6 +12,8 @@ public class DPX10Worker[T]{T haszero} {
     public val _dag:Dag[T];
     private transient val _scheduler:Scheduler[T];
 
+    private transient var copyTasksTime:Long = 0;
+
     public var finishCount:Long = 0;
 
     public def this(app:DPX10App[T], dag:Dag[T]) {
@@ -45,6 +47,8 @@ public class DPX10Worker[T]{T haszero} {
                 break;
         }
 
+        Console.OUT.println(here+" copy tasks time:"+this.copyTasksTime+"ms");
+
     }
 
     /**
@@ -66,6 +70,14 @@ public class DPX10Worker[T]{T haszero} {
 
         // 批量执行任务
 
+        val startTime = -System.currentTimeMillis();
+
+        // more fast, dont use granularity any more
+        val vidList = _dag.getAllReadyNodes();
+        this.finishCount += vidList.size();
+
+        /*
+         * slow
         var count:Int = 0n;
         val vidList = new ArrayList[VertexId]();
         while(!_dag._localReadyTasks().isEmpty()) {
@@ -77,6 +89,11 @@ public class DPX10Worker[T]{T haszero} {
             if(count==_dag._config.granularity)
                 break;
         }
+        */
+
+        this.copyTasksTime += (System.currentTimeMillis() + startTime);
+
+
 
         if(!vidList.isEmpty()) {
             if(_dag._config.scheduleStrategy.equals(Configuration.SCHEDULE_LOCAL)) {
