@@ -70,7 +70,7 @@ public abstract class Dag[T]{T haszero} {
 			this._taskDist = Dist.makeBlock(_taskRegion, 1);
 		} else {
             if(_config.distManner==Configuration.DIST_BLOCK_0)
-                this._taskDist = Dist.makeBlock(_taskRegion, 1);
+                this._taskDist = Dist.makeBlock(_taskRegion, 0);
             if(_config.distManner==Configuration.DIST_BLOCK_1)
                 this._taskDist = Dist.makeBlock(_taskRegion, 1);
             if(_config.distManner==Configuration.DIST_BLOCK_BLOCK)

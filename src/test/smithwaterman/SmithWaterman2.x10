@@ -74,7 +74,6 @@ public class SmithWaterman2 {
             while(finishCount!=allNodeCount) {
 
                 if(!this.readyTaskList().isEmpty()) {
-
                     val nids = getAllReadyNodes();
                     finishCount += nids.size();
 
@@ -95,9 +94,7 @@ public class SmithWaterman2 {
     private def compute(nid:SWNodeId) {
         val node:SWNode = distMatrix(nid.i, nid.j);
         node.isFinish = true;
-        val i = nid.i;
-        val j = nid.j;
-        //Console.OUT.println("work "+i+","+j+" "+here);
+        val i = nid.i, j = nid.j;
 
         // compute the score
         if(i==0n && j==0n) {
