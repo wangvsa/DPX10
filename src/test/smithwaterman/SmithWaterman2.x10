@@ -70,9 +70,9 @@ public class SmithWaterman2 {
         for (p in Place.places()) async at(p) {
             val allNodeCount = distMatrix.getLocalPortion().size;
             var finishCount:Long = 0;
-            while(true) {
+            while(finishCount!=allNodeCount) {
 
-                while(!this.readyTaskList().isEmpty()) {
+                if(!this.readyTaskList().isEmpty()) {
                     //val nids = new ArrayList[SWNodeId]();
                     //nids.add(getReadyNode());
                     //finishCount++;
@@ -84,9 +84,6 @@ public class SmithWaterman2 {
                 }
 
                 Runtime.probe();
-
-                if (finishCount == allNodeCount)
-                    break;
             }
         }
     }
