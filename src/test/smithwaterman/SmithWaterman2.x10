@@ -52,13 +52,14 @@ public class SmithWaterman2 {
             val it = distMatrix.getLocalPortion().iterator();
             while(it.hasNext()) {
                 val point:Point = it.next();
+                val i = point(0) as Int, j = point(1) as Int;
                 var indegree:Int = 3n;
-                if(point(0)==0 && point(1)==0) {
+                if(i==0n && j==0n) {
                     indegree = 0n;
-                    this.readyTaskList().add(new SWNodeId(point(0) as Int, point(1) as Int));
-                } else if(point(0)==0 || point(1)==0)
+                    this.readyTaskList().add(new SWNodeId(i, j));
+                } else if(i==0n || j==0n)
                     indegree = 1n;
-                distMatrix(point) = new SWNode(indegree);
+                distMatrix(i, j) = new SWNode(indegree);
             }
         });
 
@@ -73,9 +74,6 @@ public class SmithWaterman2 {
             while(finishCount!=allNodeCount) {
 
                 if(!this.readyTaskList().isEmpty()) {
-                    //val nids = new ArrayList[SWNodeId]();
-                    //nids.add(getReadyNode());
-                    //finishCount++;
 
                     val nids = getAllReadyNodes();
                     finishCount += nids.size();
@@ -150,6 +148,7 @@ public class SmithWaterman2 {
     private atomic def addReadyNode(nid:SWNodeId) {
         this.readyTaskList().add(nid);
     }
+    // Not used, slow than getAllReadyNodes()
     public atomic def getReadyNode():SWNodeId {
         return this.readyTaskList().removeFirst();
     }
@@ -176,9 +175,9 @@ public class SmithWaterman2 {
                 Console.OUT.print("-");
 
             val tmpi = i, tmpj = j;
-            val left = at(this.dist(tmpi-1, tmpj)) this.distMatrix(tmpi-1, tmpj).score;
-            val up = at(this.dist(tmpi, tmpj-1)) this.distMatrix(tmpi, tmpj-1).score;
-            val leftup = at(this.dist(tmpi-1, tmpj-1)) this.distMatrix(tmpi-1, tmpj-1).score;
+            val left = at(this.dist(tmpi-1n, tmpj)) this.distMatrix(tmpi-1n, tmpj).score;
+            val up = at(this.dist(tmpi, tmpj-1n)) this.distMatrix(tmpi, tmpj-1n).score;
+            val leftup = at(this.dist(tmpi-1n, tmpj-1n)) this.distMatrix(tmpi-1n, tmpj-1n).score;
 
             if(left >= up && left >= leftup) {
                 i = i - 1n;
@@ -199,7 +198,7 @@ public class SmithWaterman2 {
 
         for(var i:Long=0;i<M;i++) {
             for (var j:Long=0; j<N; j++) {
-                val tmpi = i, tmpj = j;
+                val tmpi = i as Int, tmpj = j as Int;
             	val score = at(this.dist(tmpi, tmpj)) this.distMatrix(tmpi, tmpj).score;
                 Console.OUT.print(score+" ");
             }
