@@ -32,13 +32,6 @@ public abstract class Dag[T]{T haszero} {
 	public var _resilientFlag : GlobalRef[Cell[Boolean]];
 
 
-    public var debugTime1 : Long = 0;
-    public var debugTime2 : Long = 0;
-    public var debugTime3 : Long = 0;
-    public var debugTime4 : Long = 0;
-    public var debugTime5 : Long = 0;
-
-
 	// 所有任务，DPX10Worker可以从任意Place访问
     public var _distAllTasks:DistArray[Node[T]];
   	// 所有的就绪任务(入度为零)，DPX10Worker可以从自己的Place访问自己的就绪任务列表
@@ -175,16 +168,12 @@ public abstract class Dag[T]{T haszero} {
      *	先查找本地缓存，如果没有从全局列表中查找然后加入缓存列表
      */
     public def getDependentVertices(i:Int, j:Int):Rail[Vertex[T]] {
-        //var t:Long = System.currentTimeMillis();
         val vids = getDependencies(i, j);
-        //this.debugTime1 += (System.currentTimeMillis() - t);
-
-        //t = System.currentTimeMillis();
         val tasks = new Rail[Vertex[T]](vids.size);
+
         for(var k:Long=0;k<vids.size;k++) {
             tasks(k) = getVertex(vids(k).i, vids(k).j);
         }
-        //this.debugTime2 += (System.currentTimeMillis() - t);
 
         return tasks;
     }
@@ -217,39 +206,21 @@ public abstract class Dag[T]{T haszero} {
 
 
     public def setResilientFlag(flag:Boolean) {
-    	at(Place(0)) _resilientFlag()() = flag;
+	at(Place(0)) _resilientFlag()() = flag;
     }
 
 	public def resilient() {
 		setResilientFlag(true);
 		remakeDistArray();
-        //testSnapShot();
 		setResilientFlag(false);
 	}
 
-    /*
-    public def testSnapShot() {
-        // create snapshot
-        var time:Long = -System.currentTimeMillis();
-        this._distAllTasks.snapshot();
-        time += System.currentTimeMillis();
-        Console.OUT.println("create snapshot time:"+time+"ms");
-
-        // create a new Dist using a new PlaceGroup
-        val livePlaces = Place.places();
-        val newDist = Dist.makeBlock(_taskRegion, 1, livePlaces);
-
-        // restore
-        time = -System.currentTimeMillis();
-        _distAllTasks.restore(newDist);
-        time += System.currentTimeMillis();
-        Console.OUT.println("remake time:"+time+"ms");
-    }
-    */
-
-
     public def remakeDistArray() {
     	val livePlaces = Place.places();
+
+        // make a false places group for evaluation
+        // val livePlaces = PlaceGroup.make(Place.numPlaces()-2);
+
         var newDist:Dist = Dist.makeBlock(_taskRegion, 1, livePlaces);
         if(_config.distManner==Configuration.DIST_BLOCK_0)
             newDist = Dist.makeBlock(_taskRegion, 0, livePlaces);
@@ -279,24 +250,32 @@ public abstract class Dag[T]{T haszero} {
     	val newReadyTasks = PlaceLocalHandle.makeFlat[ArrayList[VertexId]]
             (livePlaces, ()=>new ArrayList[VertexId](), (p:Place)=>true);
 
-    	finish for(place in livePlaces) async at(place) {
+        livePlaces.broadcastFlat(()=>{
 			val it = newArray.getLocalPortion().iterator();
 			while(it.hasNext()) {
 				val point = it.next();
-				val node = newArray(point);
+                val i:Int = point(0) as Int;
+                val j:Int = point(1) as Int;
+				val node = newArray(i, j);
 				if(node._isFinish) {
-					val vids = getAntiDependencies(point(0) as Int, point(1) as Int);
+					val vids = getAntiDependencies(i, j);
 			        for(vid in vids) {
-			        	at(newArray.dist(vid.i, vid.j)) {
-			        		val indegree = newArray(vid.i, vid.j).decrementIndegree();
-			        		if(indegree==0 && !newArray(vid.i, vid.j)._isFinish) {
-			        			newReadyTasks().add(new VertexId(vid.i, vid.j));
-			        		}
-			        	}
+                        val pl = newArray.dist(vid.i, vid.j);
+                        if(pl==here) {
+                            val antiNode = newArray(vid.i, vid.j);
+                            val indegree = antiNode.decrementIndegree();
+                            if(indegree==0 && !antiNode._isFinish)
+                                newReadyTasks().add(new VertexId(vid.i, vid.j));
+                        } else at(pl) {
+                            val antiNode = newArray(vid.i, vid.j);
+                            val indegree = antiNode.decrementIndegree();
+                            if(indegree==0 && !antiNode._isFinish)
+                                newReadyTasks().add(new VertexId(vid.i, vid.j));
+                        }
 			        }
 				}
 			}
-		}
+		});
 
 		this._taskDist = newDist;
     	this._distAllTasks = newArray;

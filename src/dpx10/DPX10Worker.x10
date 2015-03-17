@@ -32,7 +32,7 @@ public class DPX10Worker[T]{T haszero} {
 
         checkFinishCount();
         val totalSize = _dag._distAllTasks.getLocalPortion().size;
-        Console.OUT.println(here+" running on "+Runtime.getName()+", finishCount:"+finishCount+", totalCount:"+totalSize);
+        //Console.OUT.println(here+" running on "+Runtime.getName()+", finishCount:"+finishCount+", totalCount:"+totalSize);
 
         var loop_count:Int = _dag._config.loopForSchedule;
         while(true) {
@@ -49,16 +49,9 @@ public class DPX10Worker[T]{T haszero} {
                 break;
 
             // kind of slow
-            //if(_dag._resilientFlag.getLocalOrCopy()())
-            //    break;
+            if(_dag._resilientFlag.getLocalOrCopy()())
+                break;
         }
-
-        /*
-        Console.OUT.println(here+" getDependency time:"+this.getDepVerticesTime+
-            "ms, debugTime1:"+_dag.debugTime1+", debugTime2:"+_dag.debugTime2+
-            ", debugTime3:"+_dag.debugTime3+", debugTime4:"+_dag.debugTime4+
-            ", debugTime5:"+_dag.debugTime5);
-        */
     }
 
     /**
@@ -67,7 +60,8 @@ public class DPX10Worker[T]{T haszero} {
     private def checkFinishCount() {
         val it = _dag._distAllTasks.getLocalPortion().iterator();
         while(it.hasNext()) {
-            val node = _dag._distAllTasks(it.next());
+            val point = it.next();
+            val node = _dag._distAllTasks(point(0) as Int, point(1) as Int);
             if(node._isFinish)
                 finishCount++;
         }
