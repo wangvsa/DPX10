@@ -40,9 +40,6 @@ public class DPX10[T]{T haszero} {
 		time += System.currentTimeMillis();
 		Console.OUT.println("\nspend time:"+time+"ms\n");
 
-
-		recover();
-
 		//this._dag.printIndegreeMatrix();
 		//this._dag.printResultMatrix();
 		//this._app.taskFinished(_dag);
