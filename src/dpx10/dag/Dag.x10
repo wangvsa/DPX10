@@ -81,12 +81,10 @@ public abstract class Dag[T]{T haszero} {
 				val point:Point = it.next();
 				val i = point(0) as Int;
 				val j = point(1) as Int;
-				val loc = new VertexId(i, j);
 				val indegree = getDependencies(i, j).size;
-				this._distAllTasks(i, j) = new Node[T](indegree);
-				if(indegree==0) {
-					_localReadyTasks().add(loc);
-				}
+				this._distAllTasks(i, j) = new Node[T](indegree as Int);
+				if(indegree==0)
+					_localReadyTasks().add(new VertexId(i, j));
 			}
 		});
 	}
@@ -152,12 +150,12 @@ public abstract class Dag[T]{T haszero} {
         if(place==here) {
         	val node = _distAllTasks(i, j);
         	val indegree = node.decrementIndegree();
-	        if(indegree==0 && !node._isFinish)
+	        if(indegree==0n && !node._isFinish)
 	           	addReadyNode(loc);
         } else at(place) {
         	val node = _distAllTasks(i, j);
             val indegree = node.decrementIndegree();
-            if(indegree==0 && !node._isFinish)
+            if(indegree==0n && !node._isFinish)
             	addReadyNode(loc);
 	    }
     }
@@ -237,7 +235,7 @@ public abstract class Dag[T]{T haszero} {
                 val i:Int = point(0) as Int;
                 val j:Int = point(1) as Int;
 				val indegree = getDependencies(i, j).size;
-				newArray(i, j) = new Node[T](indegree);
+				newArray(i, j) = new Node[T](indegree as Int);
 				// 复制原来结果
 				if(_distAllTasks.dist(i, j)==here) {
 					newArray(i, j).setResult(_distAllTasks(i, j).getResult());
@@ -264,12 +262,12 @@ public abstract class Dag[T]{T haszero} {
                         if(pl==here) {
                             val antiNode = newArray(vid.i, vid.j);
                             val indegree = antiNode.decrementIndegree();
-                            if(indegree==0 && !antiNode._isFinish)
+                            if(indegree==0n && !antiNode._isFinish)
                                 newReadyTasks().add(new VertexId(vid.i, vid.j));
                         } else at(pl) {
                             val antiNode = newArray(vid.i, vid.j);
                             val indegree = antiNode.decrementIndegree();
-                            if(indegree==0 && !antiNode._isFinish)
+                            if(indegree==0n && !antiNode._isFinish)
                                 newReadyTasks().add(new VertexId(vid.i, vid.j));
                         }
 			        }

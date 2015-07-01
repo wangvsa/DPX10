@@ -1,6 +1,6 @@
 package dpx10.dag;
 
-import x10.util.concurrent.AtomicLong;
+import x10.util.concurrent.AtomicInteger;
 
 /**
  *
@@ -11,26 +11,26 @@ import x10.util.concurrent.AtomicLong;
 public class Node[T]{T haszero} {
 	public var _isFinish:Boolean;
 	private var _result:T;
-	private var _indegree:AtomicLong;
+	private var _indegree:Int;
 
-
-	public def this(indegree:Long) {
+	public def this(indegree:Int) {
 		this._isFinish = false;
-		this._indegree = new AtomicLong(indegree);
+		this._indegree = indegree;
 		this._result = Zero.get[T]();
 	}
 
-	public def this(indegree:Long, result:T) {
+	public def this(indegree:Int, result:T) {
 		this._isFinish = false;
-		this._indegree = new AtomicLong(indegree);
+		this._indegree = indegree;
 		this._result = result;
 	}
 
 	public def getIndegree() {
-		return this._indegree.get();
+		return this._indegree;
 	}
-	public def decrementIndegree() {
-		return this._indegree.decrementAndGet();
+	public atomic def decrementIndegree() {
+		this._indegree = this._indegree - 1n;
+		return this._indegree;
 	}
 
 	public def setResult(value:T) {

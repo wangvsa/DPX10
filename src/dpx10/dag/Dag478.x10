@@ -18,7 +18,7 @@ public class Dag478[T]{T haszero} extends Dag[T] {
                 val j = point(1) as Int;
                 val loc = new VertexId(i, j);
                 val indegree = getDependencies(i, j).size;
-                this._distAllTasks(i, j) = new Node[T](indegree);
+                this._distAllTasks(i, j) = new Node[T](indegree as Int);
                 if(i>j+1n) {
                     this._distAllTasks(i, j)._isFinish = true;
                 } else {

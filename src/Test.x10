@@ -28,7 +28,7 @@ public class Test {
 					i = point(0) as Int;
 					j = point(1) as Int;
 				}
-				val indegree = new Random().nextLong();
+				val indegree = new Random().nextInt();
 				this._distAllTasks(point) = new Node[Int](indegree);
 			}
 		});

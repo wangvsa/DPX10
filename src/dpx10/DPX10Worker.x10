@@ -152,7 +152,7 @@ public class DPX10Worker[T]{T haszero} {
             _dag.decrementIndegree(vid.i, vid.j);
         }
 
-        //Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result+", cost time:"+time+"ms");
+        //Console.OUT.println("working...("+i+","+j+"), at "+here+", workerId:"+Runtime.workerId()+", result:"+result);
     }
 
 }
