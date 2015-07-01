@@ -177,25 +177,12 @@ public abstract class Dag[T]{T haszero} {
     }
 
 
-    // not used
-    public atomic def addAndGet(vid:VertexId):VertexId {
-        if(vid.i==-9n) {
-            val firstLoc = this._localReadyTasks().removeFirst();
-            return firstLoc;
-        } else {
-            this._localReadyTasks().add(vid);
-        }
-        return vid;
-    }
-
-
+    // Add a zero indegree vertex into the read list
     public atomic def addReadyNode(vid:VertexId) {
 		this._localReadyTasks().add(vid);
     }
-    // not used
-    public atomic def getReadyNode():VertexId {
-		return this._localReadyTasks().removeFirst();
-    }
+
+    // Return the vertices that can be executed
     public atomic def getAllReadyNodes() {
         val nodes = this._localReadyTasks().clone();
         this._localReadyTasks().clear();
@@ -204,7 +191,7 @@ public abstract class Dag[T]{T haszero} {
 
 
     public def setResilientFlag(flag:Boolean) {
-	at(Place(0)) _resilientFlag()() = flag;
+	   at(Place(0)) _resilientFlag()() = flag;
     }
 
 	public def resilient() {
@@ -297,7 +284,7 @@ public abstract class Dag[T]{T haszero} {
 
 
 
-	/* 协议 ---- 由子类是实现 */
+	/* 协议 ---- 由子类实现 */
 
 	// 描述依赖关系
 	public abstract def getDependencies(i:Int, j:Int):Rail[VertexId];
