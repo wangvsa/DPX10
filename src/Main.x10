@@ -1,6 +1,7 @@
 import x10.util.*;
 import dpx10.*;
 import dpx10.dag.*;
+import dpx10.util.Util;
 import demo.*;
 import demo.smithwaterman.*;
 import demo.nussinov.*;
@@ -56,14 +57,21 @@ public class Main {
 	}
 
 	private static def sw(args:Rail[String], config:Configuration) {
-		var str1_length:Int = 10n;
-		var str2_length:Int = 10n;
+		var str1:String = "abcdefghij";
+		var str2:String = "abcdefghij";
 		if(args.size==3) {
-			str1_length = Int.parseInt(args(1));
-			str2_length = Int.parseInt(args(2));
+			str1 = ""; str2 = "";
+			// given paths or given lengths
+			if(args(1).indexOf("/")!=-1n && args(2).indexOf("/")!=-1n) {
+				str1 = FastaReader.read(args(1));
+				str2 = FastaReader.read(args(2));
+			} else {
+				str1 = Util.generateRandomString(Int.parseInt(args(1)));
+				str2 = Util.generateRandomString(Int.parseInt(args(2)));
+			}
 		}
-		val sw = new SmithWaterman(str1_length, str2_length);
-		val dag = new Dag124[Int](str1_length, str2_length, config);
+		val sw = new SmithWaterman(str1, str2);
+		val dag = new Dag124[Int](str1.length(), str2.length(), config);
 		val tada = new DPX10[Int](sw, dag);
 		tada.start();
 	}

@@ -1,11 +1,8 @@
 package demo.smithwaterman;
 
-import x10.io.File;
-import x10.io.IOException;
 import dpx10.*;
 import dpx10.dag.*;
 import dpx10.DPX10.*;
-import dpx10.util.Util;
 
 public class SmithWaterman extends DPX10AppDP[Int] {
 
@@ -16,9 +13,9 @@ public class SmithWaterman extends DPX10AppDP[Int] {
 	static val DISMATCH_SCORE = -1n;
 	static val GAP_PENALTY = -1n;		// use linear gap penalty
 
-	public def this(str1_length:Int, str2_length:Int) {
-		this.str1 = Util.generateRandomString(str1_length);
-		this.str2 = Util.generateRandomString(str2_length);
+	public def this(str1:String, str2:String) {
+		this.str1 = str1;
+		this.str2 = str2;
 	}
 
 	public def compute(i:Int, j:Int, vertices:Rail[Vertex[Int]]):Int {
