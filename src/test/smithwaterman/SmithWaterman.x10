@@ -5,7 +5,7 @@ import x10.util.Random;
 
 /**
  * This is used for comparision with DPX10
- * This is the serial version of SmithWaterman algorithm written by X10 only
+ * This is the serial version of SmithWaterman algorithm written using X10 directly
  */
 public class SmithWaterman {
 
@@ -53,6 +53,21 @@ public class SmithWaterman {
         //walkback(matrix);
     }
 
+
+    public static def main(args:Rail[String]) {
+        var len1:Int = 20n;
+        var len2:Int = 20n;
+        if(args.size==2) {
+            len1 = Int.parseInt(args(1));
+            len2 = Int.parseInt(args(1));
+        }
+        var time:Long = -System.currentTimeMillis();
+        new SmithWaterman(len1, len2).sw();
+        time += System.currentTimeMillis();
+        Console.OUT.println("spend time:"+time+"ms");
+    }
+
+
     private def walkback(matrix:Array_2[Int]) {
         var i:Int = str1.length() as Int - 1n;
         var j:Int = str2.length() as Int - 1n;
@@ -84,6 +99,7 @@ public class SmithWaterman {
         Console.OUT.println();
     }
 
+
     private def printMatrix(matrix:Array_2[Int]) {
         Console.OUT.println("matrix:");
         for (var i:Long=0; i<matrix.numElems_1; i++) {
@@ -93,22 +109,6 @@ public class SmithWaterman {
             Console.OUT.println();
         }
     }
-
-
-    public static def main(args:Rail[String]) {
-        var len1:Int = 20n;
-        var len2:Int = 20n;
-        if(args.size==2) {
-            len1 = Int.parseInt(args(1));
-            len2 = Int.parseInt(args(1));
-        }
-        var time:Long = -System.currentTimeMillis();
-        new SmithWaterman(len1, len2).sw();
-        time += System.currentTimeMillis();
-        Console.OUT.println("spend time:"+time+"ms");
-    }
-
-
 
     /**
      * Generate a string with given length

@@ -30,6 +30,11 @@ public class Knapsack {
         Console.OUT.println("sum: "+matrix(ITEM_NUM, CAPICITY));
     }
 
+    public static def main(args:Rail[String]) {
+        new Knapsack().knap();
+    }
+
+
     private def printMatrix(matrix:Array_2[Int]) {
         Console.OUT.println("matrix:");
         for (var i:Long=0; i<matrix.numElems_1; i++) {
@@ -39,9 +44,4 @@ public class Knapsack {
             Console.OUT.println();
         }
     }
-
-    public static def main(args:Rail[String]) {
-        new Knapsack().knap();
-    }
-
 }

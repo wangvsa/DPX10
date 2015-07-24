@@ -153,17 +153,6 @@ public class Knapsack2 {
         return this.readyTaskList().removeFirst();
     }
 
-
-    private def printMatrix(dist:Dist, distMatrix:DistArray[Int]) {
-        for(var i:Int=0n;i<this._item_num;i++) {
-            for (var j:Int=0n; j<this._capacity; j++) {
-                Console.OUT.print(getScore(i, j)+" ");
-            }
-            Console.OUT.println();
-        }
-    }
-
-
     public static def main(args:Rail[String]) {
         var item_num:Int = 6n;
         var capacity:Int = 40n;
@@ -200,4 +189,14 @@ public class Knapsack2 {
         }
     }
 
+
+
+    private def printMatrix(dist:Dist, distMatrix:DistArray[Int]) {
+        for(var i:Int=0n;i<this._item_num;i++) {
+            for (var j:Int=0n; j<this._capacity; j++) {
+                Console.OUT.print(getScore(i, j)+" ");
+            }
+            Console.OUT.println();
+        }
+    }
 }

@@ -10,7 +10,7 @@ import x10.util.Random;
 
 /**
  * This is used for comparision with DPX10
- * This is the distributed version of SmithWaterman algorithm wirtten by X10 only
+ * This is the distributed version of SmithWaterman algorithm wirtten using X10 directly
  */
 public class SmithWaterman2 {
 
@@ -155,6 +155,48 @@ public class SmithWaterman2 {
         return nids;
     }
 
+    public static def main(args:Rail[String]) {
+        var len1:Int = 20n;
+        var len2:Int = 20n;
+        if(args.size==2) {
+            len1 = Int.parseInt(args(0));
+            len2 = Int.parseInt(args(1));
+        }
+
+        val smithwaterman = new SmithWaterman2(len1, len2);
+        smithwaterman.init();
+        var time:Long = -System.currentTimeMillis();
+        smithwaterman.sw();
+        time += System.currentTimeMillis();
+        Console.OUT.println("spend time:"+time+"ms");
+
+        //smithwaterman.printMatrix();
+        //smithwaterman.walkback();
+    }
+
+    public static class SWNode {
+        public var indegree:AtomicInteger;
+        public var score:Int;
+        public var isFinish:Boolean;
+
+        public def this(indegree:Int) {
+            this.score = 0n;
+            this.indegree = new AtomicInteger(indegree);
+            this.isFinish = false;
+        }
+    }
+
+    public static struct SWNodeId {
+        public val i:Int;    // row
+        public val j:Int;    // col
+        public def this(i:Int, j:Int) {
+            this.i = i;
+            this.j = j;
+        }
+    }
+
+
+
 
 
     private def walkback() {
@@ -196,53 +238,12 @@ public class SmithWaterman2 {
         for(var i:Long=0;i<M;i++) {
             for (var j:Long=0; j<N; j++) {
                 val tmpi = i as Int, tmpj = j as Int;
-            	val score = at(this.dist(tmpi, tmpj)) this.distMatrix(tmpi, tmpj).score;
+                val score = at(this.dist(tmpi, tmpj)) this.distMatrix(tmpi, tmpj).score;
                 Console.OUT.print(score+" ");
             }
             Console.OUT.println();
         }
     }
-
-    public static def main(args:Rail[String]) {
-        var len1:Int = 20n;
-        var len2:Int = 20n;
-        if(args.size==2) {
-            len1 = Int.parseInt(args(0));
-            len2 = Int.parseInt(args(1));
-        }
-
-        val smithwaterman = new SmithWaterman2(len1, len2);
-        smithwaterman.init();
-        var time:Long = -System.currentTimeMillis();
-        smithwaterman.sw();
-        time += System.currentTimeMillis();
-        Console.OUT.println("spend time:"+time+"ms");
-
-        //smithwaterman.printMatrix();
-        //smithwaterman.walkback();
-    }
-
-    public static class SWNode {
-        public var indegree:AtomicInteger;
-        public var score:Int;
-        public var isFinish:Boolean;
-
-        public def this(indegree:Int) {
-            this.score = 0n;
-            this.indegree = new AtomicInteger(indegree);
-            this.isFinish = false;
-        }
-    }
-
-    public static struct SWNodeId {
-        public val i:Int;    // row
-        public val j:Int;    // col
-        public def this(i:Int, j:Int) {
-            this.i = i;
-            this.j = j;
-        }
-    }
-
 
     /**
      * Generate a string with given length
