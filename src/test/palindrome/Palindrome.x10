@@ -16,7 +16,7 @@ public class Palindrome {
         return v1 >= v2 ? v1 : v2;
     }
 
-    private def pal() {
+    private def lps() {
 
         val len = str.length();
         val matrix = new Array_2[Int](len, len, 0n);
@@ -40,7 +40,7 @@ public class Palindrome {
 
     public static def main(args:Rail[String]) {
         var time:Long = -System.currentTimeMillis();
-        new Palindrome().pal();
+        new Palindrome().lps();
         time += System.currentTimeMillis();
         Console.OUT.println("spend time:"+time+"ms");
     }
