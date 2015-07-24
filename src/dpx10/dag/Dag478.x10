@@ -8,7 +8,7 @@ public class Dag478[T]{T haszero} extends Dag[T] {
         super(height, width, config);
     }
 
-    // override
+    // override for Longest Palindrome Subsequence problem
     public def initDistributedTasks() {
         Place.places().broadcastFlat(()=>{
             val it = _distAllTasks.getLocalPortion().iterator();

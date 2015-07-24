@@ -76,7 +76,6 @@ public class SmithWaterman2 {
                 if(!this.readyTaskList().isEmpty()) {
                     val nids = getAllReadyNodes();
                     finishCount += nids.size();
-
                     async work(nids);
                 }
 

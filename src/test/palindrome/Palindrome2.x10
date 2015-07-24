@@ -11,14 +11,15 @@ import x10.util.Random  ;
  */
 public class Palindrome2 {
     public val str:String;
+    private val length:Int;
 
     private val dist:Dist;
     private val distMatrix:DistArray[PalindromeNode];
     private val readyTaskList:PlaceLocalHandle[ArrayList[PalindromeNodeId]];
 
     public def this(length:Int) {
-
-        str = generateRandomString(length);
+        this.length = length;
+        this.str = generateRandomString(length);
 
         val region = Region.make(0..(length-1), 0..(length-1));
         this.dist = Dist.makeBlock(region, 1);
@@ -38,11 +39,15 @@ public class Palindrome2 {
                 var indegree:Int;
                 if(i >= j) {
                     indegree = 0n;
-                    this.readyTaskList().add(new PalindromeNodeId(i as Int, j as Int));
+                    if(i==j+1 || i==j)
+                        this.readyTaskList().add(new PalindromeNodeId(i as Int, j as Int));
                 } else {
                     indegree = 3n;
                 }
                 distMatrix(point) = new PalindromeNode(indegree);
+                // No need to compute
+                if(i > j+1)
+                    distMatrix(point).isFinish = true;
             }
         });
     }
@@ -51,19 +56,26 @@ public class Palindrome2 {
         finish
         for (p in Place.places()) async at(p) {
             val allNodeCount = distMatrix.getLocalPortion().size;
-            var finishCount:Long = 0;
-            while(true) {
 
-                while(!this.readyTaskList().isEmpty()) {
+            // Calculate the finished vertices
+            var finishCount:Long = 0;
+            val it = distMatrix.getLocalPortion().iterator();
+            while(it.hasNext()) {
+                val node = distMatrix(it.next());
+                if(node.isFinish)
+                    finishCount++;
+            }
+
+            // Compute
+            while(finishCount!=allNodeCount) {
+
+                if(!this.readyTaskList().isEmpty()) {
                     val pnids = getAllReadyNodes();
                     finishCount += pnids.size();
                     async work(pnids);
                 }
 
                 Runtime.probe();
-
-                if (finishCount == allNodeCount)
-                    break;
             }
         }
     }
@@ -76,6 +88,7 @@ public class Palindrome2 {
     }
 
     private def compute(knid:PalindromeNodeId) {
+        //var time:Long = -System.currentTimeMillis();
         val i = knid.i;
         val j = knid.j;
         val node:PalindromeNode = distMatrix(i, j);
@@ -85,39 +98,37 @@ public class Palindrome2 {
         if( i >= j ) {
             node.score = 1n;
         } else {
-            var left:Int = 0n, leftbottom:Int = 0n, bottom:Int=0n;
-            leftbottom = getScore(i+1n, j-1n);
-            left = getScore(i, j-1n);
-            bottom = getScore(i+1n, j);
-
             if(str.charAt(i) == str.charAt(j)) {
                 if(j==i+1n)
                     node.score = 2n;
-                else
+                else {
+                    val leftbottom = getScore(i+1n, j-1n);
                     node.score = leftbottom + 2n;
+                }
             } else {
+                val left = getScore(i, j-1n);
+                val bottom = getScore(i+1n, j);
                 node.score = Math.max(left, bottom);
             }
         }
 
         // decrement the indegree of dependent nodes
-        val len = str.length();
-        if(i>j+1n) {
-
-        } else if(i==j+1n) {
+        if(i==j+1n) {
             decrementIndegree(i-1n, j+1n);
-        } else {
-            if(i-1n>=0n && j+1n<len) {
+        } else if(i<j+1n){
+            if(i-1n>=0n && j+1n<length) {
                 decrementIndegree(i-1n, j+1n);
                 decrementIndegree(i, j+1n);
                 decrementIndegree(i-1n, j);
             } else if(i-1n >= 0n) {
                 decrementIndegree(i-1n, j);
-            } else if(j+1n < len) {
+            } else if(j+1n < length) {
                 decrementIndegree(i, j+1n);
             }
         } 
-        //Console.OUT.println(i+","+j+": "+node.score);
+        //time += System.currentTimeMillis();
+        //Console.OUT.println(i+","+j+": "+time+"ms");
+
     }
 
     private def getScore(i:Int, j:Int) {
@@ -188,8 +199,8 @@ public class Palindrome2 {
 
 
     private def printMatrix() {
-        for(var i:Int=0n;i<this.str.length();i++) {
-            for (var j:Int=0n; j<this.str.length(); j++) {
+        for(var i:Int=0n;i<this.length;i++) {
+            for (var j:Int=0n; j<this.length; j++) {
                 Console.OUT.print(getScore(i, j)+" ");
             }
             Console.OUT.println();
@@ -197,8 +208,8 @@ public class Palindrome2 {
     }
      private def printIndegree() {
         Console.OUT.println("indegree matrix:");
-        for(var i:Int=0n;i<this.str.length();i++) {
-            for (var j:Int=0n; j<this.str.length(); j++) {
+        for(var i:Int=0n;i<this.length;i++) {
+            for (var j:Int=0n; j<this.length; j++) {
                 val ii = i, jj = j;
                 var indegree:Int;
                 val p = dist(ii, jj);

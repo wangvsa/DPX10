@@ -69,7 +69,7 @@ public class ManhattanTourist2 {
             var finishCount:Long = 0;
             while(true) {
 
-                while(!this.readyTaskList().isEmpty()) {
+                if(!this.readyTaskList().isEmpty()) {
                     val mtnids = getAllReadyNodes();
                     finishCount += mtnids.size();
                     async work(mtnids);

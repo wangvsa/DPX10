@@ -70,7 +70,7 @@ public class Knapsack2 {
             var finishCount:Long = 0;
             while(true) {
 
-                while(!this.readyTaskList().isEmpty()) {
+                if(!this.readyTaskList().isEmpty()) {
                     val knids = getAllReadyNodes();
                     finishCount += knids.size();
                     async work(knids);
