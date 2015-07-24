@@ -15,7 +15,7 @@ public class Palindrome extends DPX10AppDP[Int] {
 
     public def this(length:Int) {
         this.seq = Util.generateRandomString(length);
-        Console.OUT.println("string:"+this.seq);
+        //Console.OUT.println("string:"+this.seq);
     }
 
     public def compute(i:Int, j:Int, vertices:Rail[Vertex[Int]]):Int {
