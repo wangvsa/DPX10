@@ -71,9 +71,8 @@ public class Knapsack2 {
             while(true) {
 
                 while(!this.readyTaskList().isEmpty()) {
-                    val knids = new ArrayList[KnapNodeId]();
-                    knids.add(getReadyNode());
-                    finishCount++;
+                    val knids = getAllReadyNodes();
+                    finishCount += knids.size();
                     async work(knids);
                 }
 
@@ -149,9 +148,12 @@ public class Knapsack2 {
     private atomic def addReadyNode(point:KnapNodeId) {
         this.readyTaskList().add(point);
     }
-    public atomic def getReadyNode():KnapNodeId {
-        return this.readyTaskList().removeFirst();
+    public atomic def getAllReadyNodes() {
+        val knids = this.readyTaskList().clone();
+        this.readyTaskList().clear();
+        return knids;
     }
+
 
     public static def main(args:Rail[String]) {
         var item_num:Int = 6n;

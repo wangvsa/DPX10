@@ -70,10 +70,9 @@ public class ManhattanTourist2 {
             while(true) {
 
                 while(!this.readyTaskList().isEmpty()) {
-                    val knids = new ArrayList[ManhattanTouristNodeId]();
-                    knids.add(getReadyNode());
-                    finishCount++;
-                    async work(knids);
+                    val mtnids = getAllReadyNodes();
+                    finishCount += mtnids.size();
+                    async work(mtnids);
                 }
 
                 Runtime.probe();
@@ -112,7 +111,7 @@ public class ManhattanTourist2 {
 
         // decrement the indegree of dependent nodes
         if(i==height-1n && j==width-1n) {
-
+            // no anti dependent
         } else if(i==height-1n) {
             decrementIndegree(i, j+1n);
         } else if(j==width-1n) {
@@ -167,17 +166,28 @@ public class ManhattanTourist2 {
     private atomic def addReadyNode(point:ManhattanTouristNodeId) {
         this.readyTaskList().add(point);
     }
-    public atomic def getReadyNode():ManhattanTouristNodeId {
-        return this.readyTaskList().removeFirst();
+    public atomic def getAllReadyNodes() {
+        val mtnids = this.readyTaskList().clone();
+        this.readyTaskList().clear();
+        return mtnids;
     }
 
     public static def main(args:Rail[String]) {
-        val app = new ManhattanTourist2(10n, 10n);
+        var height:Int = 10n;
+        var width:Int = 10n;
+        if(args.size == 2) {
+            height = Int.parse(args(0));
+            width = Int.parse(args(1));
+        }
+
+        Console.OUT.println("height: "+height+", width: "+width);
+        val app = new ManhattanTourist2(height, width);
         app.init();
         var time:Long = -System.currentTimeMillis();
         app.manhatan();
-        app.printMatrix();
+        //app.printMatrix();
         time += System.currentTimeMillis();
+        app.getScore(height-1n, width-1n);
         Console.OUT.println("spend time:"+time+"ms");
     }
 

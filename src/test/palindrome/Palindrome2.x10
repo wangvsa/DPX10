@@ -16,11 +16,11 @@ public class Palindrome2 {
     private val distMatrix:DistArray[PalindromeNode];
     private val readyTaskList:PlaceLocalHandle[ArrayList[PalindromeNodeId]];
 
-    public def this() {
-        str = "abcfgbda";
-        val len = str.length();
+    public def this(length:Int) {
 
-        val region = Region.make(0..(len-1), 0..(len-1));
+        str = generateRandomString(length);
+
+        val region = Region.make(0..(length-1), 0..(length-1));
         this.dist = Dist.makeBlock(region, 1);
         this.distMatrix = DistArray.make[PalindromeNode](this.dist);
         this.readyTaskList = PlaceLocalHandle.makeFlat[ArrayList[PalindromeNodeId]]
@@ -55,10 +55,9 @@ public class Palindrome2 {
             while(true) {
 
                 while(!this.readyTaskList().isEmpty()) {
-                    val knids = new ArrayList[PalindromeNodeId]();
-                    knids.add(getReadyNode());
-                    finishCount++;
-                    async work(knids);
+                    val pnids = getAllReadyNodes();
+                    finishCount += pnids.size();
+                    async work(pnids);
                 }
 
                 Runtime.probe();
@@ -143,17 +142,26 @@ public class Palindrome2 {
     private atomic def addReadyNode(point:PalindromeNodeId) {
         this.readyTaskList().add(point);
     }
-    public atomic def getReadyNode():PalindromeNodeId {
-        return this.readyTaskList().removeFirst();
+    public atomic def getAllReadyNodes() {
+        val pnids = this.readyTaskList().clone();
+        this.readyTaskList().clear();
+        return pnids;
     }
 
     public static def main(args:Rail[String]) {
-        val app = new Palindrome2();
+
+        var length:Int = 10n;
+        if(args.size==1)
+            length = Int.parse(args(0));
+
+        Console.OUT.println("length: "+length);
+        val app = new Palindrome2(length);
         app.init();
         var time:Long = -System.currentTimeMillis();
         app.lps();
-        app.printMatrix();
+        //app.printMatrix();
         time += System.currentTimeMillis();
+        Console.OUT.println("result: "+app.getScore(0n, length-1n));
         Console.OUT.println("spend time:"+time+"ms");
     }
 
@@ -202,6 +210,17 @@ public class Palindrome2 {
             }
             Console.OUT.println();
         }
+    }
+
+    private def generateRandomString(length:Int) {
+        val range = "abcdefghijklmnopqrstuvwxyz";
+        val all_chars = range.chars();
+        val rand = new Random();
+        val str_chars = new Rail[Char](length);
+        for(var i:Int=0n;i<length;i++) {
+            str_chars(i) = all_chars(rand.nextLong(all_chars.size));
+        }
+        return new String(str_chars);
     }
     
 

@@ -145,10 +145,6 @@ public class SmithWaterman2 {
     private atomic def addReadyNode(nid:SWNodeId) {
         this.readyTaskList().add(nid);
     }
-    // Not used, slow than getAllReadyNodes()
-    public atomic def getReadyNode():SWNodeId {
-        return this.readyTaskList().removeFirst();
-    }
     public atomic def getAllReadyNodes() {
         val nids = this.readyTaskList().clone();
         this.readyTaskList().clear();
