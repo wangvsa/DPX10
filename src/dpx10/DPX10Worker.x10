@@ -1,6 +1,7 @@
 package dpx10;
 
 import x10.util.*;
+import x10.xrx.Runtime;
 import x10.regionarray.*;
 import dpx10.dag.*;
 import dpx10.Configuration;

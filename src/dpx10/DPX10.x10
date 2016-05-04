@@ -1,6 +1,7 @@
 package dpx10;
 
 import x10.util.Team;
+import x10.xrx.Runtime;
 import dpx10.dag.*;
 
 public class DPX10[T]{T haszero} {
